@@ -86,6 +86,13 @@ class report_edit_form extends moodleform {
         $mform->addElement('header', 'exportoptions', get_string('exportoptions', 'block_configurable_reports'));
         $options = cr_get_export_plugins();
 
+        if (get_config('block_configurable_reports', 'reporttableui') == 'datatables'){
+            // datatables handles ordering & we need this to be enabled for js to work
+            $mform->freeze('jsordering');
+            // we handle pagination through datatables natively
+            $mform->freeze('pagination');
+        }
+
         foreach ($options as $key => $val) {
             $mform->addElement('checkbox', 'export_'.$key, null, $val);
         }
@@ -137,9 +144,15 @@ class report_edit_form extends moodleform {
             // We need object for file_prepare_standard_editor.
             $default_values = (object)$default_values;
         }
+
+        if (get_config('block_configurable_reports', 'reporttableui') == 'datatables'){
+            $default_values->pagination = 0;
+            $default_values->jsordering = true;
+        }
+
         $default_values = file_prepare_standard_editor($default_values, 'summary', $this->get_editor_options());
 
-        parent::set_data($default_values);
+            parent::set_data($default_values);
     }
 
 

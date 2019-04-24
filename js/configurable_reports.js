@@ -27,7 +27,6 @@ M.block_configurable_reports = {
             smartIndent: true,
             lineNumbers: true,
             matchBrackets : true,
-        //    autofocus: true
         });
 
     },

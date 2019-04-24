@@ -552,7 +552,8 @@ class report_base {
     public function add_jsordering(\moodle_page $moodle_page) {
         switch (get_config('block_configurable_reports', 'reporttableui')) {
             case 'datatables':
-                cr_add_jsdatatables('#reporttable', $moodle_page);
+                $dtconfig = cr_unserialize($this->config->components)['customsql']['config']->datatablesconfig;
+                cr_add_jsdatatables('#reporttable', $moodle_page, $dtconfig);
                 break;
             case 'jquery':
                 cr_add_jsordering('#reporttable', $moodle_page);

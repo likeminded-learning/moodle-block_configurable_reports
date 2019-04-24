@@ -4,7 +4,22 @@ define(
         'block_configurable_reports/jquery.tablesorter',
         'block_configurable_reports/jquery.dataTables',
         'block_configurable_reports/codemirror',
-        'block_configurable_reports/sql'
+        'block_configurable_reports/javascript',
+        'block_configurable_reports/sql',
+        // datatables extensions:
+        'block_configurable_reports/dataTables.select',
+        'block_configurable_reports/dataTables.buttons',
+        'block_configurable_reports/buttons.colVis',
+        'block_configurable_reports/buttons.print',
+        'block_configurable_reports/dataTables.rowGroup',
+        'block_configurable_reports/dataTables.autoFill',
+        'block_configurable_reports/dataTables.colReorder',
+        'block_configurable_reports/dataTables.fixedColumns',
+        'block_configurable_reports/dataTables.fixedHeader',
+        'block_configurable_reports/dataTables.keyTable',
+        'block_configurable_reports/dataTables.responsive',
+        'block_configurable_reports/dataTables.rowReorder',
+        'block_configurable_reports/dataTables.scroller'
     ], function ($, tablesorter, dataTable, CodeMirror) {
     return {
         js_order: function (params) {
@@ -25,33 +40,28 @@ define(
             });
         },
         add_jsdatatables: function (params) {
-            $(params.selector).dataTable({
-                'bAutoWidth': false,
-                'sPaginationType': 'full_numbers',
-                'fixedHeader': true,
-                'oLanguage': {
-                    'oAria': {
-                        'sSortAscending': M.str.block_configurable_reports.datatables_sortascending,
-                        'sSortDescending': M.str.block_configurable_reports.datatables_sortdescending,
-                    },
-                    'oPaginate': {
-                        'sFirst': M.str.block_configurable_reports.datatables_first,
-                        'sLast': M.str.block_configurable_reports.datatables_last,
-                        'sNext': M.str.block_configurable_reports.datatables_next,
-                        'sPrevious': M.str.block_configurable_reports.datatables_previous
-                    },
-                    'sEmptyTable': M.str.block_configurable_reports.datatables_emptytable,
-                    'sInfo': M.str.block_configurable_reports.datatables_info,
-                    'sInfoEmpty': M.str.block_configurable_reports.datatables_infoempty,
-                    'sInfoFiltered': M.str.block_configurable_reports.datatables_infofiltered,
-                    'sInfoThousands': M.str.langconfig.thousandssep,
-                    'sLengthMenu': M.str.block_configurable_reports.datatables_lengthmenu,
-                    'sLoadingRecords': M.str.block_configurable_reports.datatables_loadingrecords,
-                    'sProcessing': M.str.block_configurable_reports.datatables_processing,
-                    'sSearch': M.str.block_configurable_reports.datatables_search,
-                    'sZeroRecords': M.str.block_configurable_reports.datatables_zerorecords
-                }
-            });
+            var configuration = null;
+            eval('configuration = ' + params.dtconfig);
+
+            var vaa = {
+                rowGroup: {
+                    dataSrc: 3
+                },
+                columnDefs: [
+                    {
+                        targets: [3],
+                        visible: false
+                    }
+                ],
+                "paging": false,
+                "autoWidth": true,
+                "buttons": [
+                    'colvis',
+                    'print'
+                ]
+            };
+
+            $(params.selector).dataTable(configuration);
         },
         cmirror: function() {
             // Documentation can be found @ http://codemirror.net/
@@ -71,6 +81,13 @@ define(
                 smartIndent: true,
                 lineNumbers: true,
                 //    autofocus: true
+            });
+
+            CodeMirror.fromTextArea(document.getElementById('id_datatablesconfig'), {
+                mode: "text/javascript",
+                rtlMoveVisually: true,
+                smartIndent: true,
+                lineNumbers: true,
             });
         }
     };

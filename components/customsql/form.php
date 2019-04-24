@@ -46,6 +46,40 @@ class customsql_form extends moodleform {
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->setType('courseid', PARAM_INT);
 
+        if (get_config('block_configurable_reports', 'reporttableui') == 'datatables')
+        {
+            // datatables config
+            $mform->addElement('textarea', 'datatablesconfig', 'DataTables.JS configuration', 'rows="15" cols="90"'); // TODO: lang string
+            $mform->setDefault('datatablesconfig',
+"{
+    'bAutoWidth': false,
+    'sPaginationType': 'full_numbers',
+    'fixedHeader': true,
+    'oLanguage': {
+        'oAria': {
+            'sSortAscending': M.str.block_configurable_reports.datatables_sortascending,
+            'sSortDescending': M.str.block_configurable_reports.datatables_sortdescending,
+        },
+        'oPaginate': {
+            'sFirst': M.str.block_configurable_reports.datatables_first,
+            'sLast': M.str.block_configurable_reports.datatables_last,
+            'sNext': M.str.block_configurable_reports.datatables_next,
+            'sPrevious': M.str.block_configurable_reports.datatables_previous
+        },
+        'sEmptyTable': M.str.block_configurable_reports.datatables_emptytable,
+        'sInfo': M.str.block_configurable_reports.datatables_info,
+        'sInfoEmpty': M.str.block_configurable_reports.datatables_infoempty,
+        'sInfoFiltered': M.str.block_configurable_reports.datatables_infofiltered,
+        'sInfoThousands': M.str.langconfig.thousandssep,
+        'sLengthMenu': M.str.block_configurable_reports.datatables_lengthmenu,
+        'sLoadingRecords': M.str.block_configurable_reports.datatables_loadingrecords,
+        'sProcessing': M.str.block_configurable_reports.datatables_processing,
+        'sSearch': M.str.block_configurable_reports.datatables_search,
+        'sZeroRecords': M.str.block_configurable_reports.datatables_zerorecords
+    }
+}");
+        }
+
         $this->add_action_buttons();
 
         $mform->addElement('static', 'note', '', get_string('listofsqlreports', 'block_configurable_reports'));

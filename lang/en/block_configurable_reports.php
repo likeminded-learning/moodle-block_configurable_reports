@@ -308,8 +308,8 @@ $string['includesubcats'] = 'Include subcategories';
 
 $string['coursededicationtime'] = 'Course dedication time';
 
-$string['jsordering_help'] = 'JavaScript Ordering allow you to order the report table without reloading the page';
-$string['pagination_help'] = 'Number of records to show in each page. Zero means no pagination';
+$string['jsordering_help'] = 'JavaScript Ordering allow you to order the report table without reloading the page.<br>Always on for DataTables library';
+$string['pagination_help'] = 'Number of records to show in each page. Zero means no pagination<br>Always 0 for DataTables library';
 $string['typeofreport_help'] = 'Choose the type of report you want to create.
 For security, SQL Report requires an additional capability';
 $string['template_marks'] = 'Template marks';

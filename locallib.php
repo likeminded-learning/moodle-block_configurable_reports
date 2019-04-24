@@ -45,10 +45,10 @@ function cr_print_js_function() {
 <?php
 }
 
-function cr_add_jsdatatables($cssid, \moodle_page $page) {
-    global $OUTPUT;
+function cr_add_jsdatatables($cssid, \moodle_page $page, $dtconfig) {
     $data = array();
     $data['selector'] = $cssid;
+    $data['dtconfig'] = !empty($dtconfig) ? $dtconfig : null;
 
     $page->requires->string_for_js('thousandssep', 'langconfig');
     $page->requires->strings_for_js(
@@ -246,7 +246,7 @@ function cr_print_table($table, $return = false) {
     }
 
     if (empty($table->width)) {
-        $table->width = '80%';
+        $table->width = '100%';
     }
 
     if (empty($table->tablealign)) {
@@ -297,7 +297,9 @@ function cr_print_table($table, $return = false) {
                 $extraclass = '';
             }
 
-            $output .= '<th style="vertical-align:top;'. $align[$key].$size[$key] .';white-space:normal;" class="header c'.$key.$extraclass.'" scope="col">'. $heading .'</th>';
+            $output .= '<th 
+            class="header c'.$key.$extraclass.'" 
+            scope="col">'. $heading .'</th>';
         }
         $output .= '</tr></thead>'."\n";
     }
