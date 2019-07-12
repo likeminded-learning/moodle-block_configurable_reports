@@ -55,6 +55,7 @@ class customsql_form extends moodleform {
     'bAutoWidth': false,
     'sPaginationType': 'full_numbers',
     'fixedHeader': true,
+    'lengthMenu': [ [-1, 100, 250, 500], ['All', 100, 250, 500] ],
     'oLanguage': {
         'oAria': {
             'sSortAscending': M.str.block_configurable_reports.datatables_sortascending,

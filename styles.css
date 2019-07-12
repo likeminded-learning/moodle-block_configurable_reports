@@ -873,7 +873,9 @@ span.CodeMirror-selectedtext {
     text-transform: capitalize;
 }
 
-#reporttable_wrapper table * {
+#reporttable_wrapper table tr,
+#reporttable_wrapper table td,
+#reporttable_wrapper table th {
     border: 1px solid #e6e6e6;
 }
 
