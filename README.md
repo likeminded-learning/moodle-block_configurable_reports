@@ -1,6 +1,9 @@
-Configurable Reports Block
+## Configurable Reports Block (Fork)
 
-Installation, Documentation, Tutorials....
+#### LM Changes
+Added ability to provide *DataTables* configuration.
+
+#### Installation, Documentation, Tutorials....
 See http://docs.moodle.org/en/blocks/configurable_reports/
 Also http://moodle.org/mod/data/view.php?d=13&rid=4283
 
