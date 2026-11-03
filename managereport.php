@@ -107,9 +107,9 @@ $PAGE->set_cacheable(true);
 $jsmodule = [
     'name' => 'block_configurable_reports',
     'fullpath' => '/blocks/configurable_reports/js/configurable_reports.js',
-    'requires' => ['io'],
+    'requires' => ['io', 'json-parse'],
 ];
-$PAGE->requires->js_init_call('M.block_configurable_reports.loadReportCategories', null, false, $jsmodule);
+$PAGE->requires->js_init_call('M.block_configurable_reports.loadReportCategories', [$course->id], false, $jsmodule);
 
 echo $OUTPUT->header();
 

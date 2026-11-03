@@ -37,7 +37,7 @@ class component_customsql extends component_base {
      * @return void
      */
     public function init(): void {
-        global $PAGE;
+        global $COURSE, $PAGE;
 
         $this->plugins = false;
         $this->ordering = false;
@@ -49,7 +49,8 @@ class component_customsql extends component_base {
         }
 
         if (get_config('block_configurable_reports', 'sharedsqlrepository')) {
-            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports');
+            // Totara has no M.cfg.courseId, so give the course to the script.
+            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports', [$COURSE->id]);
         }
     }
 

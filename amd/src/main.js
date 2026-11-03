@@ -13,6 +13,9 @@ define(
         // textarea's own value is not enough once CodeMirror has taken it over.
         var remoteeditor = null;
 
+        // The course the AJAX scripts check access in. Totara has no M.cfg.courseId, so PHP gives it.
+        var courseid = null;
+
         /**
          * Ask one of the plugin's AJAX scripts for a category listing or a report.
          *
@@ -21,7 +24,7 @@ define(
          * @return {Promise} Resolved with the decoded response.
          */
         var request = function(script, params) {
-            params.courseid = Config.courseId;
+            params.courseid = courseid;
             params.sesskey = Config.sesskey;
 
             var url = Config.wwwroot + '/blocks/configurable_reports/' + script + '?' +
@@ -131,7 +134,8 @@ define(
                     });
                 }
             },
-            remote_reports: function() {
+            remote_reports: function(course) {
+                courseid = course;
                 var categories = document.getElementById('id_reportcategories');
                 var reports = document.getElementById('id_reportsincategory');
                 var query = document.getElementById('id_remotequerysql');

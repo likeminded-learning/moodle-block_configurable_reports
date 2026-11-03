@@ -2,12 +2,13 @@
 
 M.block_configurable_reports = {
 
-    loadReportCategories: function(Y) {
+    loadReportCategories: function(Y, courseid) {
         this.Y = Y;
+        this.courseid = courseid;
 
         select_reportcategories = Y.one('#id_crreportcategories');
         Y.io(M.cfg.wwwroot + '/blocks/configurable_reports/repository.php', {
-            data: 'action=listreports&courseid=' + M.cfg.courseId + '&sesskey=' + M.cfg.sesskey,
+            data: 'action=listreports&courseid=' + courseid + '&sesskey=' + M.cfg.sesskey,
             context: this,
             method: "GET",
             on: {
@@ -37,7 +38,7 @@ M.block_configurable_reports = {
 
         Y.io(M.cfg.wwwroot + '/blocks/configurable_reports/repository.php', {
             data: 'action=listcategory&category=' + encodeURIComponent(select_element[select_element.selectedIndex].value) +
-                '&courseid=' + M.cfg.courseId + '&sesskey=' + M.cfg.sesskey,
+                '&courseid=' + this.courseid + '&sesskey=' + M.cfg.sesskey,
             context: this,
             method: "GET",
             on: {
