@@ -119,7 +119,7 @@ class plugin_categories extends filter_base {
 
         // Core's list is in the order the categories are arranged in, names each one under its
         // parent, and leaves out the ones this user is not allowed to see.
-        $categories = \core_course_category::make_categories_list();
+        $categories = cr_get_categories_list();
 
         if ($this->report->type !== 'sql') {
             $reportclassname = 'report_' . $this->report->type;

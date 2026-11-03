@@ -624,6 +624,41 @@ function cr_get_context(int $context, ?int $id = null, $strictness = null) {
 }
 
 /**
+ * Get the user name fields, for both Moodle 3.11+ and Totara.
+ *
+ * Totara does not have \core_user\fields. It keeps get_all_user_name_fields(), which Moodle removed in 4.2.
+ *
+ * @return array [string[] $fields, string $selects] The name fields, and the same fields as an SQL select list.
+ */
+function cr_get_user_name_fields(): array {
+    if (class_exists('\core_user\fields')) {
+        $fields = \core_user\fields::get_name_fields();
+        $selects = \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects;
+
+        return [$fields, $selects];
+    }
+
+    return [array_values(get_all_user_name_fields()), get_all_user_name_fields(true)];
+}
+
+/**
+ * Get the list of course categories this user can see, for both Moodle and Totara.
+ *
+ * Totara does not have core_course_category. It keeps the older coursecat class.
+ *
+ * @param string $requiredcapability
+ * @param int $excludeid
+ * @return array Category names, keyed by category id.
+ */
+function cr_get_categories_list(string $requiredcapability = '', int $excludeid = 0): array {
+    if (class_exists('core_course_category')) {
+        return core_course_category::make_categories_list($requiredcapability, $excludeid);
+    }
+
+    return coursecat::make_categories_list($requiredcapability, $excludeid);
+}
+
+/**
  * cr_make_categories_list
  *
  * @param array $list
@@ -642,7 +677,7 @@ function cr_make_categories_list(&$list, &$parents, $requiredcapability = '', $e
         $list = [];
     }
 
-    $list += core_course_category::make_categories_list($requiredcapability, $excludeid);
+    $list += cr_get_categories_list($requiredcapability, $excludeid);
 
     // Building the list of all parents of all categories in the system is highly undesirable and hardly ever needed.
     // Usually user needs only parents for one particular category, in which case should be used:
