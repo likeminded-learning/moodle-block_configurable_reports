@@ -26,6 +26,16 @@ namespace block_configurable_reports;
 
 defined('MOODLE_INTERNAL') || die();
 
+// Totara and Moodle before 4.2 have only the global external classes. Give them the Moodle 4.2 names.
+if (!class_exists(\core_external\external_api::class)) {
+    global $CFG;
+    require_once($CFG->libdir . '/externallib.php');
+    class_alias(\external_api::class, \core_external\external_api::class);
+    class_alias(\external_function_parameters::class, \core_external\external_function_parameters::class);
+    class_alias(\external_single_structure::class, \core_external\external_single_structure::class);
+    class_alias(\external_value::class, \core_external\external_value::class);
+}
+
 use context_course;
 use context_system;
 use core_external\external_api;
