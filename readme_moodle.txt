@@ -74,6 +74,40 @@ the image folder into the "DataTables styles" section in 'styles.css'.
 
 
 =======================
+DataTables extensions (Buttons, RowGroup)
+=======================
+https://cdn.datatables.net/releases.html
+
+Use the extension releases made for the DataTables version in
+'amd/src/jquery.dataTables.js'.
+
+1. Download these files from https://cdn.datatables.net/:
+   buttons/<version>/js/dataTables.buttons.js
+   buttons/<version>/js/buttons.colVis.js
+   buttons/<version>/js/buttons.print.js
+   rowgroup/<version>/js/dataTables.rowGroup.js
+
+2. Copy each one into 'amd/src/' with the same name:
+
+   2.a. Add /*eslint-disable*/ to the beginning of the file.
+
+   2.b. In the define() call only, replace the module names:
+   ------------------
+    'datatables.net'          -> 'block_configurable_reports/jquery.dataTables'
+    'datatables.net-buttons'  -> 'block_configurable_reports/dataTables.buttons'
+   ------------------
+
+3. Download 'css/buttons.dataTables.css' and 'css/rowGroup.dataTables.css'.
+Prefix every selector with '#page-blocks-configurable_reports-viewreport '
+(after 'html.dark ' where a selector starts with it), and put them into the
+"DataTables Buttons styles" and "DataTables RowGroup styles" sections in
+'styles.css'.
+
+4. Execute grunt to compile js
+   grunt js
+
+
+=======================
 TableSorter
 =======================
 https://github.com/Mottie/tablesorter
