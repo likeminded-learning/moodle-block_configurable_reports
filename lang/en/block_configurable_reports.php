@@ -365,8 +365,8 @@ $string['includesubcats'] = 'Include subcategories';
 
 $string['coursededicationtime'] = 'Course dedication time';
 
-$string['jsordering_help'] = 'JavaScript Ordering allow you to order the report table without reloading the page';
-$string['pagination_help'] = 'Number of records to show in each page. Zero means no pagination';
+$string['jsordering_help'] = 'JavaScript Ordering allow you to order the report table without reloading the page. Always on when the report table UI is DataTables.';
+$string['pagination_help'] = 'Number of records to show in each page. Zero means no pagination. Always zero when the report table UI is DataTables, which pages the table itself.';
 $string['typeofreport_help'] = 'Choose the type of report you want to create.
 For security, SQL Report requires an additional capability';
 $string['template_marks'] = 'Template marks';
@@ -552,6 +552,17 @@ $string['datatables_loadingrecords'] = 'Loading...';
 $string['datatables_processing'] = 'Processing...';
 $string['datatables_search'] = 'Search:';
 $string['datatables_zerorecords'] = 'No matching records found';
+$string['datatablesconfig'] = 'DataTables options';
+$string['datatablesconfig_help'] = 'Options for the DataTables report table, as a JSON object. They replace the default options with the same keys. Leave empty to use the defaults. The language options come from the language strings.
+
+Examples:
+
+* Show all rows first: `{"lengthMenu": [[-1, 100, 250, 500], ["All", 100, 250, 500]]}`
+* Group the rows by the 4th column and hide it: `{"rowGroup": {"dataSrc": 3}, "columnDefs": [{"targets": [3], "visible": false}]}`
+* Add buttons to show or hide columns and to print: `{"dom": "Blfrtip", "buttons": ["colvis", "print"]}`
+
+See <https://datatables.net/reference/option/>.';
+$string['datatablesconfiginvalid'] = 'The DataTables options must be a JSON object, for example {"paging": false}. Use double quotes, and do not use functions or variables.';
 // New features: Graph new column.
 
 $string['others'] = 'Others';

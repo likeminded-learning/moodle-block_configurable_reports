@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/formslib.php');
 
+use block_configurable_reports\datatables_config;
+
 /**
  * Class customsql_form
  *
@@ -52,6 +54,13 @@ class customsql_form extends moodleform {
 
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->setType('courseid', PARAM_INT);
+
+        if (get_config('block_configurable_reports', 'reporttableui') === 'datatables') {
+            $mform->addElement('textarea', 'datatablesconfig', get_string('datatablesconfig', 'block_configurable_reports'),
+                'rows="10" cols="80" spellcheck="false" style="font-family: monospace;"');
+            $mform->setType('datatablesconfig', PARAM_RAW);
+            $mform->addHelpButton('datatablesconfig', 'datatablesconfig', 'block_configurable_reports');
+        }
 
         $this->add_action_buttons();
 
@@ -100,10 +109,33 @@ class customsql_form extends moodleform {
      */
     public function validation($data, $files): array {
         if (get_config('block_configurable_reports', 'sqlsecurity')) {
-            return $this->validation_high_security($data, $files);
+            $errors = $this->validation_high_security($data, $files);
+        } else {
+            $errors = $this->validation_low_security($data, $files);
         }
 
-        return $this->validation_low_security($data, $files);
+        if (isset($data['datatablesconfig']) && !datatables_config::is_valid($data['datatablesconfig'])) {
+            $errors['datatablesconfig'] = get_string('datatablesconfiginvalid', 'block_configurable_reports');
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Load the form data. Show DataTables options from the 2019 fork as JSON, when they can be converted.
+     *
+     * @param stdClass|array $defaultvalues
+     * @return void
+     */
+    public function set_data($defaultvalues): void {
+        $defaultvalues = (object) $defaultvalues;
+        $config = $defaultvalues->datatablesconfig ?? '';
+        if (!datatables_config::is_valid($config)) {
+            $defaultvalues = clone $defaultvalues;
+            $defaultvalues->datatablesconfig = datatables_config::legacy_to_json($config) ?? $config;
+        }
+
+        parent::set_data($defaultvalues);
     }
 
     /**

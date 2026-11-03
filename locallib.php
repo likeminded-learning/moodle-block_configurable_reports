@@ -55,11 +55,13 @@ function cr_print_js_function() {
  *
  * @param string $cssid
  * @param moodle_page $page
+ * @param stdClass|null $options DataTables options of the report. They replace the defaults with the same keys.
  * @return void
  */
-function cr_add_jsdatatables(string $cssid, moodle_page $page) {
+function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $options = null) {
     $data = [];
     $data['selector'] = $cssid;
+    $data['options'] = $options;
 
     $page->requires->string_for_js('thousandssep', 'langconfig');
     $page->requires->strings_for_js(

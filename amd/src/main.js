@@ -6,8 +6,9 @@ define(
         'block_configurable_reports/codemirror',
         'block_configurable_reports/sql',
         'core/config',
-        'core/notification'
-    ], function($, tablesorter, dataTable, CodeMirror, sql, Config, Notification) {
+        'core/notification',
+        'require'
+    ], function($, tablesorter, dataTable, CodeMirror, sql, Config, Notification, require) {
 
         // The editor wrapping the remote query textarea, when syntax highlighting is on. Setting the
         // textarea's own value is not enough once CodeMirror has taken it over.
@@ -78,7 +79,7 @@ define(
                 });
             },
             add_jsdatatables: function(params) {
-                $(params.selector).dataTable({
+                var defaults = {
                     'bAutoWidth': false,
                     'sPaginationType': 'full_numbers',
                     'fixedHeader': true,
@@ -105,6 +106,24 @@ define(
                         'sSearch': M.str.block_configurable_reports.datatables_search,
                         'sZeroRecords': M.str.block_configurable_reports.datatables_zerorecords
                     }
+                };
+
+                // The report's own options replace the defaults with the same keys. Arrays are replaced, not merged.
+                var options = $.extend(true, {}, defaults, params.options || {});
+                Object.keys(params.options || {}).forEach(function(key) {
+                    if (Array.isArray(params.options[key])) {
+                        options[key] = params.options[key];
+                    }
+                });
+
+                // Load the extensions only on the report page. They register themselves with DataTables.
+                require([
+                    'block_configurable_reports/dataTables.buttons',
+                    'block_configurable_reports/buttons.colVis',
+                    'block_configurable_reports/buttons.print',
+                    'block_configurable_reports/dataTables.rowGroup'
+                ], function() {
+                    $(params.selector).dataTable(options);
                 });
             },
             cmirror: function() {

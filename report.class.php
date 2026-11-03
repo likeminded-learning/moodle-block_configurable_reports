@@ -795,7 +795,17 @@ abstract class report_base {
     public function add_jsordering(moodle_page $moodlepage): void {
         switch (get_config('block_configurable_reports', 'reporttableui')) {
             case 'datatables':
-                cr_add_jsdatatables('#reporttable', $moodlepage);
+                $options = null;
+                if ($this->config->type === 'sql') {
+                    $components = cr_unserialize($this->config->components);
+                    $config = $components['customsql']['config']->datatablesconfig ?? null;
+                    $options = \block_configurable_reports\datatables_config::decode($config);
+                    if ($options === null && trim((string) $config) !== '') {
+                        debugging('The DataTables options of report ' . $this->config->id .
+                            ' are not a JSON object. The default options are used.', DEBUG_DEVELOPER);
+                    }
+                }
+                cr_add_jsdatatables('#reporttable', $moodlepage, $options);
                 break;
             case 'jquery':
                 cr_add_jsordering('#reporttable', $moodlepage);
