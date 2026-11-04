@@ -45,7 +45,13 @@ class component_customsql extends component_base {
         $this->help = true;
 
         if (get_config('block_configurable_reports', 'sqlsyntaxhighlight')) {
-            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'cmirror');
+            // Totara has no M.cfg.courseId, so give the course to the script.
+            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'cmirror', [[
+                'courseid' => $COURSE->id,
+                'dialect' => cr_sql_dialect(),
+                'placeholders' => cr_sql_placeholders(),
+                'syntaxerror' => get_string('sqlsyntaxerror', 'block_configurable_reports'),
+            ]]);
         }
 
         if (get_config('block_configurable_reports', \block_configurable_reports\report_repository::SETTING)) {

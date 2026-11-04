@@ -15,6 +15,13 @@
         <licenseversion></licenseversion>
     </library>
     <library>
+        <location>amd/src/sqleditor-lazy.js</location>
+        <name>CodeMirror 6 with @codemirror/lang-sql (bundled from cm6/package.json)</name>
+        <version>6.43.15 (view), 6.10.0 (lang-sql)</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
         <location>amd/src/jquery.dataTables.js</location>
         <name>DataTables</name>
         <version>1.13.7</version>

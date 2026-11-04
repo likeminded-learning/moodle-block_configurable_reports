@@ -77,6 +77,22 @@ the image folder into the "DataTables styles" section in 'styles.css'.
 
 
 =======================
+CodeMirror 6 SQL editor (Likeminded fork)
+=======================
+The Custom SQL form uses CodeMirror 6 with @codemirror/lang-sql: the dialect of the site
+database, completion of prefix_ tables, columns and %%...%% placeholders, and a mark for
+unbalanced brackets. The source is cm6/src/sqleditor.js; the versions are pinned in
+cm6/package.json. CodeMirror 6 is only published as ES modules, so esbuild bundles it into
+one AMD module:
+
+    cd cm6 && npm ci --ignore-scripts && ./build.sh
+
+This writes amd/src/sqleditor-lazy.js and amd/build/sqleditor-lazy.min.js. The "-lazy"
+name keeps the module out of the JavaScript that every page loads. The CodeMirror 5 files
+above stay for merges from upstream, but main.js does not use them.
+
+
+=======================
 DataTables extensions (Buttons, RowGroup)
 =======================
 https://cdn.datatables.net/releases.html

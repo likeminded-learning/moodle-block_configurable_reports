@@ -903,3 +903,48 @@ function block_configurable_reports_can_managesqlreports($context): bool {
 
     return false;
 }
+
+/**
+ * Get the SQL dialect of the site database, for the SQL editor.
+ *
+ * @return string 'mysql', 'mariadb', 'pgsql', or 'standard' for other databases.
+ */
+function cr_sql_dialect(): string {
+    global $CFG, $DB;
+
+    switch ($DB->get_dbfamily()) {
+        case 'mysql':
+            return $CFG->dbtype === 'mariadb' ? 'mariadb' : 'mysql';
+        case 'postgres':
+            return 'pgsql';
+        default:
+            return 'standard';
+    }
+}
+
+/**
+ * Get the placeholders that SQL reports can use, for the completion of the SQL editor.
+ *
+ * The report placeholders are the ones that report_sql::prepare_sql() replaces. The filter placeholders come
+ * from the filter plugins: those that take a column are shown as %%FILTER_NAME:column%%.
+ *
+ * @return string[]
+ */
+function cr_sql_placeholders(): array {
+    global $CFG;
+
+    // The variable and search text filters build their placeholder names at run time, so they are listed here.
+    $placeholders = ['%%COURSEID%%', '%%USERID%%', '%%CATEGORYID%%', '%%STARTTIME%%', '%%ENDTIME%%', '%%WWWROOT%%',
+        '%%DEBUG%%', '%%FILTER_VAR%%', '%%FILTER_SEARCHTEXT:column%%'];
+    foreach (cr_get_component_plugins('filters') as $filter) {
+        $code = file_get_contents($CFG->dirroot . '/blocks/configurable_reports/components/filters/' . $filter .
+            '/plugin.class.php');
+        preg_match_all('/%%(FILTER_[A-Z_]+)(:)?/', $code, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $placeholders[] = empty($match[2]) ? '%%' . $match[1] . '%%' : '%%' . $match[1] . ':column%%';
+        }
+    }
+
+    return array_values(array_unique($placeholders));
+}
+

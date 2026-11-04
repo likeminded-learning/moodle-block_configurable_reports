@@ -1939,7 +1939,7 @@ span.CodeMirror-selectedtext {
 }
 
 #fitem_id_querysql textarea,
-#fitem_id_querysql .CodeMirror,
+#fitem_id_querysql .cm-editor,
 #fitem_id_datatablesconfig textarea {
     width: 100%;
     max-width: none;

@@ -32,6 +32,9 @@ This fork of [jleyva/moodle-block_configurable_reports](https://github.com/jleyv
   Manage reports can create a report from the repository and export a report
   in its format. The Custom SQL tab can pull only the SQL or only the
   DataTables options of a repository report.
+- **SQL editor.** CodeMirror 6 with the SQL dialect of the site database,
+  completion of `prefix_` tables, columns and `%%...%%` placeholders, and a
+  mark for unbalanced brackets. See readme_moodle.txt to rebuild it.
 
 To update from upstream, merge `MOODLE_4x_STABLE` into this branch. The Totara
 changes are in separate commits, to make conflicts easy to find.

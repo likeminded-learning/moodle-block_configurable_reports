@@ -625,3 +625,4 @@ $string['repositoryreportnotavailable'] = 'The repository report {$a} has no SQL
 $string['createfromrepository'] = 'Create report from repository';
 $string['createfromrepository_help'] = 'Create a new SQL report from a report in the report repository: its settings, SQL, DataTables options and filters. Set the permissions of the new report after you create it.';
 $string['notavailablefordatabase'] = '{$a} (not available for this database)';
+$string['sqlsyntaxerror'] = 'Syntax error: check the brackets and quotes.';

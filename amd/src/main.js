@@ -3,12 +3,10 @@ define(
         'jquery',
         'block_configurable_reports/jquery.tablesorter',
         'block_configurable_reports/jquery.dataTables',
-        'block_configurable_reports/codemirror',
-        'block_configurable_reports/sql',
         'core/config',
         'core/notification',
         'require'
-    ], function($, tablesorter, dataTable, CodeMirror, sql, Config, Notification, require) {
+    ], function($, tablesorter, dataTable, Config, Notification, require) {
 
         // The editor wrapping the SQL query textarea, when syntax highlighting is on. Setting the
         // textarea's own value is not enough once CodeMirror has taken it over.
@@ -112,19 +110,30 @@ define(
                     $(params.selector).addClass('display').dataTable(options);
                 });
             },
-            cmirror: function() {
-                // Documentation can be found @ http://codemirror.net/
+            cmirror: function(options) {
+                courseid = options.courseid;
                 var query = document.getElementById('id_querysql');
-                if (query) {
-                    queryeditor = CodeMirror.fromTextArea(query, {
-                        mode: "text/x-mysql",
-                        rtlMoveVisually: true,
-                        indentWithTabs: true,
-                        smartIndent: true,
-                        lineNumbers: true,
+                if (!query) {
+                    return;
+                }
+
+                // The editor is a large module, so only this form loads it.
+                require(['block_configurable_reports/sqleditor-lazy'], function(sqleditor) {
+                    queryeditor = sqleditor.fromTextArea(query, {
+                        dialect: options.dialect,
+                        placeholders: options.placeholders,
+                        syntaxerror: options.syntaxerror,
                         autofocus: true,
                     });
-                }
+
+                    // Complete table and column names when the database has given them.
+                    request('schema.php', {})
+                        .then(function(response) {
+                            queryeditor.setTables(response.tables);
+                            return;
+                        })
+                        .catch(Notification.exception);
+                });
             },
             remote_reports: function(course, strings) {
                 courseid = course;
