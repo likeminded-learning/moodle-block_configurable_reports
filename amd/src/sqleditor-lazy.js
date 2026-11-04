@@ -1,5 +1,5 @@
 /*eslint-disable*/
-define("block_configurable_reports/sqleditor-lazy", [], function() {
+define([], function() {
 var sqleditor = (() => {
   var __defProp = Object.defineProperty;
   var __defProps = Object.defineProperties;

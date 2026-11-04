@@ -8,7 +8,8 @@ cd "$(dirname "$0")"
 
 MODULE=sqleditor-lazy
 OPTIONS="--bundle --format=iife --global-name=sqleditor --target=es2017 --legal-comments=none --log-level=warning"
-BANNER="define(\"block_configurable_reports/$MODULE\", [], function() {"
+# No module name: Totara adds it when it serves the file, and a second name breaks the module.
+BANNER="define([], function() {"
 FOOTER="return sqleditor; });"
 
 npx esbuild src/sqleditor.js $OPTIONS --banner:js="/*eslint-disable*/

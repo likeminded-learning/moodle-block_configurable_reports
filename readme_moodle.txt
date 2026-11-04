@@ -77,6 +77,17 @@ the image folder into the "DataTables styles" section in 'styles.css'.
 
 
 =======================
+Totara: AMD builds without module names (Likeminded fork)
+=======================
+Totara adds the module name to the first "define(" of each AMD file when it serves it.
+A build that already names its module, as the Moodle 4 grunt builds do, then has two
+names, and RequireJS reads the module as a string. After a merge from upstream or a
+rebuild, remove the names from the builds:
+
+    sed -i -E '0,/define\("block_configurable_reports\/[^"]+",\s*/s//define(/' amd/build/*.min.js
+
+
+=======================
 CodeMirror 6 SQL editor (Likeminded fork)
 =======================
 The Custom SQL form uses CodeMirror 6 with @codemirror/lang-sql: the dialect of the site
