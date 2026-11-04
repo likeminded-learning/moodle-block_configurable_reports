@@ -26,33 +26,43 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
+    // Totara 20 renamed the admin setting classes. Its old names still work, but write a debugging notice.
+    $settingclass = function(string $moodleclass, string $totaraclass): string {
+        return class_exists($totaraclass) ? $totaraclass : $moodleclass;
+    };
+    $textsetting = $settingclass('admin_setting_configtext', 'core\setting\type\text');
+    $passwordsetting = $settingclass('admin_setting_configpasswordunmask', 'core\setting\type\password_unmask');
+    $timesetting = $settingclass('admin_setting_configtime', 'core\setting\type\time');
+    $checkboxsetting = $settingclass('admin_setting_configcheckbox', 'core\setting\type\checkbox');
+    $selectsetting = $settingclass('admin_setting_configselect', 'core\setting\type\select');
+
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/dbhost', get_string('dbhost', 'block_configurable_reports'),
             get_string('dbhostinfo', 'block_configurable_reports'), '', PARAM_URL, 30
         )
     );
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/dbname', get_string('dbname', 'block_configurable_reports'),
             get_string('dbnameinfo', 'block_configurable_reports'), '', PARAM_RAW, 30
         )
     );
     $settings->add(
-        new admin_setting_configpasswordunmask(
+        new $passwordsetting(
             'block_configurable_reports/dbuser', get_string('dbuser', 'block_configurable_reports'),
             get_string('dbuserinfo', 'block_configurable_reports'), '', PARAM_RAW, 30
         )
     );
     $settings->add(
-        new admin_setting_configpasswordunmask(
+        new $passwordsetting(
             'block_configurable_reports/dbpass', get_string('dbpass', 'block_configurable_reports'),
             get_string('dbpassinfo', 'block_configurable_reports'), '', PARAM_RAW, 30
         )
     );
 
     $settings->add(
-        new admin_setting_configtime(
+        new $timesetting(
             'block_configurable_reports/cron_hour',
             'cron_minute',
             get_string('executeat', 'block_configurable_reports'),
@@ -62,14 +72,14 @@ if ($ADMIN->fulltree) {
     );
 
     $settings->add(
-        new admin_setting_configcheckbox(
+        new $checkboxsetting(
             'block_configurable_reports/sqlsecurity', get_string('sqlsecurity', 'block_configurable_reports'),
             get_string('sqlsecurityinfo', 'block_configurable_reports'), 1
         )
     );
 
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/crrepository',
             get_string('crrepository', 'block_configurable_reports'),
             get_string('crrepositoryinfo', 'block_configurable_reports'),
@@ -80,7 +90,7 @@ if ($ADMIN->fulltree) {
     );
 
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/sharedsqlrepository',
             get_string('sharedsqlrepository', 'block_configurable_reports'),
             get_string('sharedsqlrepositoryinfo', 'block_configurable_reports'),
@@ -91,7 +101,7 @@ if ($ADMIN->fulltree) {
     );
 
     $settings->add(
-        new admin_setting_configcheckbox(
+        new $checkboxsetting(
             'block_configurable_reports/sqlsyntaxhighlight', get_string('sqlsyntaxhighlight', 'block_configurable_reports'),
             get_string('sqlsyntaxhighlightinfo', 'block_configurable_reports'), 1
         )
@@ -103,14 +113,14 @@ if ($ADMIN->fulltree) {
         'datatables' => get_string('reporttableui_datatables', 'block_configurable_reports'),
     ];
     $settings->add(
-        new admin_setting_configselect(
+        new $selectsetting(
             'block_configurable_reports/reporttableui', get_string('reporttableui', 'block_configurable_reports'),
             get_string('reporttableuiinfo', 'block_configurable_reports'), 'datatables', $reporttableoptions
         )
     );
 
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/reportlimit', get_string('reportlimit', 'block_configurable_reports'),
             get_string('reportlimitinfo', 'block_configurable_reports'), '5000', PARAM_INT, 6
         )
@@ -122,13 +132,13 @@ if ($ADMIN->fulltree) {
         $csvdelimiteroptions[$delimiter] = get_string('csvdelimiter_' . $delimiter, 'block_configurable_reports');
     }
     $settings->add(
-        new admin_setting_configselect(
+        new $selectsetting(
             'block_configurable_reports/csvdelimiter', get_string('csvdelimiter', 'block_configurable_reports'),
             get_string('csvdelimiterinfo', 'block_configurable_reports'), 'cfg', $csvdelimiteroptions
         )
     );
     $settings->add(
-        new admin_setting_configtext(
+        new $textsetting(
             'block_configurable_reports/allowedsqlusers', get_string('allowedsqlusers', 'block_configurable_reports'),
             get_string('allowedsqlusersinfo', 'block_configurable_reports'), '', PARAM_TEXT
         )
