@@ -21,7 +21,7 @@ This fork of [jleyva/moodle-block_configurable_reports](https://github.com/jleyv
   Options saved by the 2019 fork are converted when a report is viewed or edited.
 - **DataTables Buttons and RowGroup** extensions, for column visibility,
   print and row grouping.
-- **Report table styles**: dark header, borders and indented groups.
+- **Report table styles**: a clean table (thin row lines, light stripes, hover highlight) and indented groups.
 
 To update from upstream, merge `MOODLE_4x_STABLE` into this branch. The Totara
 changes are in separate commits, to make conflicts easy to find.
