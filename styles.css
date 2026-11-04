@@ -1927,3 +1927,20 @@ span.CodeMirror-selectedtext {
 #page-blocks-configurable_reports-editreport .CodeMirror {
     width: 100%;
 }
+/* Likeminded: the SQL and DataTables editors use the full width of the form, with the label above. */
+#fitem_id_querysql > .fitemtitle,
+#fitem_id_querysql > .felement,
+#fitem_id_datatablesconfig > .fitemtitle,
+#fitem_id_datatablesconfig > .felement {
+    float: none;
+    width: 100%;
+    max-width: none;
+    flex: 0 0 100%;
+}
+
+#fitem_id_querysql textarea,
+#fitem_id_querysql .CodeMirror,
+#fitem_id_datatablesconfig textarea {
+    width: 100%;
+    max-width: none;
+}
