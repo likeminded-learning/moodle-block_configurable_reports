@@ -123,7 +123,8 @@ define(
                     'block_configurable_reports/buttons.print',
                     'block_configurable_reports/dataTables.rowGroup'
                 ], function() {
-                    $(params.selector).dataTable(options);
+                    // The 'display' class gives the DataTables default style: row lines, stripes, hover and ordered column.
+                    $(params.selector).addClass('display').dataTable(options);
                 });
             },
             cmirror: function() {

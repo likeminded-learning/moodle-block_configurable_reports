@@ -68,6 +68,9 @@ the image folder into the "DataTables styles" section in 'styles.css'.
    as broad as 'table.dataTable' would otherwise restyle the tables of any other
    plugin that uses DataTables.
 
+   4.b. Remove the '@charset' line. Change the ':root' selector, which holds the
+   '--dt-*' colour variables, to '#page-blocks-configurable_reports-viewreport'.
+
 5. Execute grunt to compile js
    grunt js
 
