@@ -28,6 +28,11 @@ use advanced_testcase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+// Totara has no advanced_testcase. A class whose parent is not known yet is declared when this line has run.
+if (!class_exists('advanced_testcase')) {
+    class_alias(\core_phpunit\testcase::class, 'advanced_testcase');
+}
+
 /**
  * Tests for datatables_config
  *
