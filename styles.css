@@ -70,6 +70,40 @@
     border: 0;
 }
 
+/* Likeminded colours on the DataTables default theme: a header colour and clear alternate rows.
+ * The theme shades cells with box-shadow overlays, which these background colours replace. */
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > thead > tr > th {
+    background-color: #f1f3f5;
+    color: #212529;
+    font-weight: bold;
+    border-bottom: 2px solid #adb5bd;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr > * {
+    box-shadow: none;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.odd > td {
+    background-color: #ffffff;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.even > td {
+    background-color: #f6f8fa;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr:hover > td {
+    background-color: #e9ecef;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.dtrg-group > th {
+    background-color: #eef0f2;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.dtrg-group.dtrg-level-0 > th {
+    background-color: #dee2e6;
+    font-weight: bold;
+}
+
 /* DataTables styles */
 /* stylelint-disable -- Copied from the DataTables and CodeMirror releases, see readme_moodle.txt. */
 #page-blocks-configurable_reports-viewreport {
