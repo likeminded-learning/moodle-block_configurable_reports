@@ -64,10 +64,25 @@ class datatables_config {
      * Check a configuration that a user submits.
      *
      * @param string $config
-     * @return bool True when it is empty or a JSON object.
+     * @return bool True when it is empty, a JSON object, or an object literal that converts to JSON.
      */
     public static function is_valid(string $config): bool {
-        return trim($config) === '' || self::decode_json($config) !== null;
+        return trim($config) === '' || self::decode($config) !== null;
+    }
+
+    /**
+     * Get the configuration to store and show in the form.
+     *
+     * @param string $config
+     * @return string|null The JSON object, as it is or converted from an object literal. An empty string
+     *     when the configuration is empty. Null when it cannot be converted.
+     */
+    public static function to_json(string $config): ?string {
+        if (trim($config) === '') {
+            return '';
+        }
+
+        return self::decode_json($config) === null ? self::legacy_to_json($config) : $config;
     }
 
     /**

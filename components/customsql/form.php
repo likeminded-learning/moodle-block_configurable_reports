@@ -128,14 +128,25 @@ class customsql_form extends moodleform {
      * @return void
      */
     public function set_data($defaultvalues): void {
-        $defaultvalues = (object) $defaultvalues;
+        $defaultvalues = clone (object) $defaultvalues;
         $config = $defaultvalues->datatablesconfig ?? '';
-        if (!datatables_config::is_valid($config)) {
-            $defaultvalues = clone $defaultvalues;
-            $defaultvalues->datatablesconfig = datatables_config::legacy_to_json($config) ?? $config;
-        }
+        $defaultvalues->datatablesconfig = datatables_config::to_json($config) ?? $config;
 
         parent::set_data($defaultvalues);
+    }
+
+    /**
+     * Get the submitted data. Store the DataTables options as JSON, also when they were typed as an object literal.
+     *
+     * @return stdClass|null
+     */
+    public function get_data() {
+        $data = parent::get_data();
+        if (isset($data->datatablesconfig)) {
+            $data->datatablesconfig = datatables_config::to_json($data->datatablesconfig) ?? $data->datatablesconfig;
+        }
+
+        return $data;
     }
 
     /**

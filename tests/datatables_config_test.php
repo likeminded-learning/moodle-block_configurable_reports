@@ -76,7 +76,7 @@ final class datatables_config_test extends advanced_testcase {
             'lengthMenu' => [[-1, 100, 250, 500], ['All', 100, 250, 500]],
         ];
 
-        $this->assertFalse(datatables_config::is_valid(self::LEGACY_DEFAULT));
+        $this->assertTrue(datatables_config::is_valid(self::LEGACY_DEFAULT));
         $this->assertEquals($expected, json_decode(datatables_config::legacy_to_json(self::LEGACY_DEFAULT)));
         $this->assertEquals($expected, datatables_config::decode(self::LEGACY_DEFAULT));
     }
@@ -92,6 +92,34 @@ final class datatables_config_test extends advanced_testcase {
                 'paging' => false],
             datatables_config::decode($legacy)
         );
+    }
+
+    /**
+     * A user can type trailing commas. The form accepts them and stores JSON.
+     */
+    public function test_trailing_commas_are_accepted_and_stored_as_json(): void {
+        $typed = '{
+  "order": [[2, "asc"], [0, "asc"],],
+  "rowGroup": { "dataSrc": [2, 0], },
+  "columnDefs": [{ "targets": [0], "visible": false, },],
+}';
+        $expected = (object) [
+            'order' => [[2, 'asc'], [0, 'asc']],
+            'rowGroup' => (object) ['dataSrc' => [2, 0]],
+            'columnDefs' => [(object) ['targets' => [0], 'visible' => false]],
+        ];
+
+        $this->assertTrue(datatables_config::is_valid($typed));
+        $this->assertEquals($expected, json_decode(datatables_config::to_json($typed)));
+    }
+
+    /**
+     * JSON is stored as the user typed it, and empty text stays empty.
+     */
+    public function test_json_is_stored_as_typed(): void {
+        $this->assertSame('{"paging": false}', datatables_config::to_json('{"paging": false}'));
+        $this->assertSame('', datatables_config::to_json("  \n"));
+        $this->assertNull(datatables_config::to_json('{ x: function() {} }'));
     }
 
     /**

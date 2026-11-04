@@ -562,7 +562,7 @@ Examples:
 * Add buttons to show or hide columns and to print: `{"dom": "Blfrtip", "buttons": ["colvis", "print"]}`
 
 See <https://datatables.net/reference/option/>.';
-$string['datatablesconfiginvalid'] = 'The DataTables options must be a JSON object, for example {"paging": false}. Use double quotes, and do not use functions or variables.';
+$string['datatablesconfiginvalid'] = 'The DataTables options must be a JSON object, for example {"paging": false}. Do not use functions or variables.';
 // New features: Graph new column.
 
 $string['others'] = 'Others';
