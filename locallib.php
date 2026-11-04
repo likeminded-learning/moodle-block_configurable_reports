@@ -66,8 +66,6 @@ function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $option
     $page->requires->string_for_js('thousandssep', 'langconfig');
     $page->requires->strings_for_js(
         [
-            'datatables_sortascending',
-            'datatables_sortdescending',
             'datatables_first',
             'datatables_last',
             'datatables_next',

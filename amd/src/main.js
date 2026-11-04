@@ -2,15 +2,17 @@ define(
     [
         'jquery',
         'block_configurable_reports/jquery.tablesorter',
-        'block_configurable_reports/jquery.dataTables',
         'core/config',
         'core/notification',
         'require'
-    ], function($, tablesorter, dataTable, Config, Notification, require) {
+    ], function($, tablesorter, Config, Notification, require) {
 
         // The editor wrapping the SQL query textarea, when syntax highlighting is on. Setting the
         // textarea's own value is not enough once CodeMirror has taken it over.
         var queryeditor = null;
+
+        // The "render" value in the report's DataTables options that asks for a row checkbox column.
+        var SELECT_RENDER = 'select';
 
         // The course the AJAX scripts check access in. Totara has no M.cfg.courseId, so PHP gives it.
         var courseid = null;
@@ -62,32 +64,30 @@ define(
                 });
             },
             add_jsdatatables: function(params) {
+                var str = M.str.block_configurable_reports;
+                // camelCase keys: DataTables copies a legacy (Hungarian) key over its camelCase key, so a legacy
+                // default would replace the report's own camelCase option.
                 var defaults = {
-                    'bAutoWidth': false,
-                    'sPaginationType': 'full_numbers',
-                    'fixedHeader': true,
-                    'aaSorting': [],
-                    'oLanguage': {
-                        'oAria': {
-                            'sSortAscending': M.str.block_configurable_reports.datatables_sortascending,
-                            'sSortDescending': M.str.block_configurable_reports.datatables_sortdescending,
+                    autoWidth: false,
+                    pagingType: 'full_numbers',
+                    order: [],
+                    language: {
+                        paginate: {
+                            first: str.datatables_first,
+                            last: str.datatables_last,
+                            next: str.datatables_next,
+                            previous: str.datatables_previous
                         },
-                        'oPaginate': {
-                            'sFirst': M.str.block_configurable_reports.datatables_first,
-                            'sLast': M.str.block_configurable_reports.datatables_last,
-                            'sNext': M.str.block_configurable_reports.datatables_next,
-                            'sPrevious': M.str.block_configurable_reports.datatables_previous
-                        },
-                        'sEmptyTable': M.str.block_configurable_reports.datatables_emptytable,
-                        'sInfo': M.str.block_configurable_reports.datatables_info,
-                        'sInfoEmpty': M.str.block_configurable_reports.datatables_infoempty,
-                        'sInfoFiltered': M.str.block_configurable_reports.datatables_infofiltered,
-                        'sInfoThousands': M.str.langconfig.thousandssep,
-                        'sLengthMenu': M.str.block_configurable_reports.datatables_lengthmenu,
-                        'sLoadingRecords': M.str.block_configurable_reports.datatables_loadingrecords,
-                        'sProcessing': M.str.block_configurable_reports.datatables_processing,
-                        'sSearch': M.str.block_configurable_reports.datatables_search,
-                        'sZeroRecords': M.str.block_configurable_reports.datatables_zerorecords
+                        emptyTable: str.datatables_emptytable,
+                        info: str.datatables_info,
+                        infoEmpty: str.datatables_infoempty,
+                        infoFiltered: str.datatables_infofiltered,
+                        thousands: M.str.langconfig.thousandssep,
+                        lengthMenu: str.datatables_lengthmenu,
+                        loadingRecords: str.datatables_loadingrecords,
+                        processing: str.datatables_processing,
+                        search: str.datatables_search,
+                        zeroRecords: str.datatables_zerorecords
                     }
                 };
 
@@ -99,15 +99,25 @@ define(
                     }
                 });
 
-                // Load the extensions only on the report page. They register themselves with DataTables.
+                // Load DataTables and the extensions only on the report page. The extensions register themselves.
                 require([
+                    'block_configurable_reports/jquery.dataTables',
                     'block_configurable_reports/dataTables.buttons',
                     'block_configurable_reports/buttons.colVis',
                     'block_configurable_reports/buttons.print',
-                    'block_configurable_reports/dataTables.rowGroup'
-                ], function() {
+                    'block_configurable_reports/dataTables.rowGroup',
+                    'block_configurable_reports/dataTables.select'
+                ], function(DataTable) {
+                    // JSON cannot hold a function, so a column with "render": "select" gets the Select checkbox.
+                    (options.columns || []).concat(options.columnDefs || []).forEach(function(column) {
+                        if (column && column.render === SELECT_RENDER) {
+                            column.render = DataTable.render.select();
+                        }
+                    });
                     // The 'display' class gives the DataTables default style: row lines, stripes, hover and ordered column.
-                    $(params.selector).addClass('display').dataTable(options);
+                    var table = document.querySelector(params.selector);
+                    table.classList.add('display');
+                    new DataTable(table, options);
                 });
             },
             cmirror: function(options) {

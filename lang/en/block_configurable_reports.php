@@ -520,8 +520,6 @@ $string['finalgradeincurrentcourse'] = 'Final grade in current course';
 $string['legacylognotenabled'] = 'Legacy logs must be enabled.
  Go to Site administration / Plugins / Logging Enable the Legacy log and inside the log settings check Log legacy data';
 
-$string['datatables_sortascending'] = ': activate to sort column ascending';
-$string['datatables_sortdescending'] = ': activate to sort column descending';
 $string['datatables_first'] = 'First';
 $string['datatables_last'] = 'Last';
 $string['datatables_next'] = 'Next';
@@ -542,7 +540,8 @@ Examples:
 
 * Show all rows first: `{"lengthMenu": [[-1, 100, 250, 500], ["All", 100, 250, 500]]}`
 * Group the rows by the 4th column and hide it: `{"rowGroup": {"dataSrc": 3}, "columnDefs": [{"targets": [3], "visible": false}]}`
-* Add buttons to show or hide columns and to print: `{"dom": "Blfrtip", "buttons": ["colvis", "print"]}`
+* Add buttons to show or hide columns and to print: `{"layout": {"topStart": ["buttons", "pageLength"]}, "buttons": ["colvis", "print"]}`
+* Add a row checkbox column, with a header checkbox that selects all rows that match the search, on all pages: `{"columnDefs": [{"targets": 0, "render": "select", "orderable": false}], "select": {"style": "multi", "selector": "td:first-child", "headerCheckbox": true}}`
 
 See <https://datatables.net/reference/option/>.';
 $string['datatablesconfiginvalid'] = 'The DataTables options must be a JSON object, for example {"paging": false}. Do not use functions or variables.';
