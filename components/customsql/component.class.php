@@ -48,9 +48,17 @@ class component_customsql extends component_base {
             $PAGE->requires->js_call_amd('block_configurable_reports/main', 'cmirror');
         }
 
-        if (get_config('block_configurable_reports', 'sharedsqlrepository')) {
+        if (get_config('block_configurable_reports', \block_configurable_reports\report_repository::SETTING)) {
             // Totara has no M.cfg.courseId, so give the course to the script.
-            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports', [$COURSE->id]);
+            $strings = [
+                'confirmsql' => get_string('pulloverwrite', 'block_configurable_reports',
+                    get_string('querysql', 'block_configurable_reports')),
+                'confirmdatatables' => get_string('pulloverwrite', 'block_configurable_reports',
+                    get_string('datatablesconfig', 'block_configurable_reports')),
+                'yes' => get_string('yes'),
+                'cancel' => get_string('cancel'),
+            ];
+            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports', [$COURSE->id, $strings]);
         }
     }
 

@@ -86,7 +86,6 @@ $string['displayprintbuttondescription'] = 'Displays the print button at the bot
 $string['embedlink'] = 'Embed Link';
 $string['embedlinkdescription'] = 'You can copy this link to embed the report in an HTML block';
 $string['cron_help'] = 'Schedule this query to run each day (At night)';
-$string['errorremotereport'] = 'The repository did not return a report for that name.';
 $string['remote'] = 'Run on remote db';
 $string['remotedescription'] = 'Do you want to run this query on the remote db';
 $string['remote_help'] = 'Do you want to run this query on the remote db';
@@ -479,13 +478,8 @@ $string['totalrecords'] = 'Total record count = {$a->totalrecords}';
 $string['reporttruncated'] = 'This report is incomplete. The query returned more than {$a} rows, which is the report row limit, so the rest were left out. Narrow the query so that it returns fewer rows, or ask an administrator to raise the report row limit.';
 $string['lastexecutiontime'] = 'Execution time = {$a} (Sec)';
 
-$string['reportcategories'] = '1) Choose a remote report categories';
-$string['reportsincategory'] = '2) Choose a report form the list';
-$string['remotequerysql'] = 'SQL query';
 $string['executeat'] = 'Execute at';
 $string['executeatinfo'] = 'Moodle CRON will run scheduled SQL queries after selected time. Once in 24h';
-$string['sharedsqlrepository'] = 'Shared sql repository';
-$string['sharedsqlrepositoryinfo'] = 'Name of GitHub account owner + slash + repository name';
 $string['sqlsyntaxhighlight'] = 'Highlight SQL syntax';
 $string['sqlsyntaxhighlightinfo'] = 'Highlight SQL syntax in code editor (CodeMirror JS library)';
 $string['datatables'] = 'Enable DataTables JS library';
@@ -513,17 +507,6 @@ $string['enableglobal'] = 'This is a global report (accessible from any course)'
 $string['global_help'] =
     'Global report can be accessed from any course in the platform just appending &courseid=MY_COURSE_ID in the report URL';
 
-$string['crrepository'] = 'Reports repository';
-$string['crrepositoryinfo'] =
-    'Remote shared repository with sample reports fully functional (Name of GitHub account owner + slash + repository name)';
-$string['importfromrepository'] = 'Import report from repository';
-$string['repository'] = 'Reports repository';
-$string['repository_help'] = 'You can import sample reports from a public shared repository.
-
-Please, notice that there is a daily limit of calls to the repository.
-
-If the connection to the repository is not working, you can download manually here <a href="https://github.com/jleyva/moodle-configurable_reports_repository" target="_blank">https://github.com/jleyva/moodle-configurable_reports_repository</a> a report and then import it using the "Import report" feature displayed bellow
-';
 $string['reportcreated'] = 'Report successfully created';
 $string['usersincohorts'] = 'User who are member of a/several cohorts';
 $string['usersincohorts_summary'] = 'Only the users who are members of the selected cohorts';
@@ -624,4 +607,21 @@ $string['csvdelimiter_comma'] = 'comma';
 $string['csvdelimiter_semicolon'] = 'semicolon';
 $string['csvdelimiter_tab'] = 'tab';
 $string['csvdelimiterinfo'] = 'CSV delimiter: "colon" for ":", "comma" for ",", semicolon for ";",  "tab" for "\t" and "cfg" for character configured in "CFG->CSV_DELIMITER" of the config.php file.';
-
+$string['errorrepository'] = 'The report repository could not be read: {$a}';
+$string['errorrepositoryexport'] = 'Only SQL reports on a MySQL or PostgreSQL site can be exported to the repository format.';
+$string['errorrepositoryreport'] = 'The repository report is not valid: {$a}';
+$string['errorrepositorysetting'] = 'The report repository setting must be owner/repo or owner/repo@ref, not "{$a}".';
+$string['exportrepository'] = 'Repository format';
+$string['pulldatatables'] = 'Pull DataTables options';
+$string['pulloverwrite'] = 'Replace the text in "{$a}" with the text from the repository? It is not saved until you save the form.';
+$string['pullsql'] = 'Pull SQL';
+$string['reportrepository'] = 'Report repository';
+$string['reportrepositoryinfo'] = 'The GitHub repository of shared SQL reports: owner/repo@ref, for example likeminded-learning/totara-configurable-reports@main. Without @ref, the default branch is used. Leave empty to turn off the repository.';
+$string['reportrepositorytoken'] = 'Report repository token';
+$string['reportrepositorytokeninfo'] = 'A GitHub fine-grained token with read-only access to the contents of the report repository. Leave empty for a public repository.';
+$string['repositoryreport'] = 'Repository report';
+$string['repositoryreport_help'] = 'A report from the report repository. "Pull SQL" and "Pull DataTables options" replace the text of those fields. The report is not changed until you save the form.';
+$string['repositoryreportnotavailable'] = 'The repository report {$a} has no SQL for the database of this site.';
+$string['createfromrepository'] = 'Create report from repository';
+$string['createfromrepository_help'] = 'Create a new SQL report from a report in the report repository: its settings, SQL, DataTables options and filters. Set the permissions of the new report after you create it.';
+$string['notavailablefordatabase'] = '{$a} (not available for this database)';

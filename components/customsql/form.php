@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/formslib.php');
 
 use block_configurable_reports\datatables_config;
+use block_configurable_reports\report_repository;
 
 /**
  * Class customsql_form
@@ -44,7 +45,7 @@ class customsql_form extends moodleform {
      * Form definition
      */
     public function definition(): void {
-        global $COURSE;
+        global $COURSE, $DB;
 
         $mform =& $this->_form;
 
@@ -67,35 +68,24 @@ class customsql_form extends moodleform {
 
         $mform->addElement('static', 'note', '', get_string('listofsqlreports', 'block_configurable_reports'));
 
-        if ($userandrepo = get_config('block_configurable_reports', 'sharedsqlrepository')) {
+        if ($repository = report_repository::from_config()) {
+            try {
+                $select = $mform->createElement('select', 'repositoryreport',
+                    get_string('repositoryreport', 'block_configurable_reports'));
+                $repository->add_options($select, $DB->get_dbfamily());
+                $mform->addElement($select);
+                $mform->addHelpButton('repositoryreport', 'repositoryreport', 'block_configurable_reports');
 
-            $github = new \block_configurable_reports\github;
-            $github->set_repo($userandrepo);
-            $res = $github->get('/contents');
-            $res = json_decode($res);
-
-            if (is_array($res)) {
-                $reportcategories = [get_string('choose')];
-
-                foreach ($res as $item) {
-                    if ($item->type === 'dir') {
-                        $reportcategories[$item->path] = $item->path;
-                    }
+                $buttons = [$mform->createElement('button', 'pullsql', get_string('pullsql', 'block_configurable_reports'))];
+                if ($mform->elementExists('datatablesconfig')) {
+                    $buttons[] = $mform->createElement('button', 'pulldatatables',
+                        get_string('pulldatatables', 'block_configurable_reports'));
                 }
-
-                $reportcatstr = get_string('reportcategories', 'block_configurable_reports');
-                $mform->addElement('select', 'reportcategories', $reportcatstr, $reportcategories);
-
-                // The reports are the ones in the chosen category, so the list starts out empty.
-                $reportsincatstr = get_string('reportsincategory', 'block_configurable_reports');
-                $mform->addElement('select', 'reportsincategory', $reportsincatstr, [get_string('choose')]);
-
-                $mform->addElement(
-                    'textarea',
-                    'remotequerysql',
-                    get_string('remotequerysql', 'block_configurable_reports'),
-                    'rows="15" cols="90"'
-                );
+                $mform->addGroup($buttons, 'pullbuttons', '', ' ', false);
+            } catch (moodle_exception $e) {
+                // The form still works without the repository, so show why it is not there.
+                $mform->addElement('static', 'repositoryerror', get_string('repositoryreport', 'block_configurable_reports'),
+                    $e->getMessage());
             }
         }
     }
@@ -143,6 +133,11 @@ class customsql_form extends moodleform {
      */
     public function get_data() {
         $data = parent::get_data();
+        if ($data === null) {
+            return null;
+        }
+        // The repository picker only fills the form, it is not part of the report.
+        unset($data->repositoryreport);
         if (isset($data->datatablesconfig)) {
             $data->datatablesconfig = datatables_config::to_json($data->datatablesconfig) ?? $data->datatablesconfig;
         }

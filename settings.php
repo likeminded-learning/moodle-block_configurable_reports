@@ -80,23 +80,21 @@ if ($ADMIN->fulltree) {
 
     $settings->add(
         new $textsetting(
-            'block_configurable_reports/crrepository',
-            get_string('crrepository', 'block_configurable_reports'),
-            get_string('crrepositoryinfo', 'block_configurable_reports'),
-            'jleyva/moodle-configurable_reports_repository',
-            PARAM_URL,
-            40
+            'block_configurable_reports/' . \block_configurable_reports\report_repository::SETTING,
+            get_string('reportrepository', 'block_configurable_reports'),
+            get_string('reportrepositoryinfo', 'block_configurable_reports'),
+            'likeminded-learning/totara-configurable-reports@main',
+            PARAM_TEXT,
+            60
         )
     );
 
     $settings->add(
-        new $textsetting(
-            'block_configurable_reports/sharedsqlrepository',
-            get_string('sharedsqlrepository', 'block_configurable_reports'),
-            get_string('sharedsqlrepositoryinfo', 'block_configurable_reports'),
-            'jleyva/moodle-custom_sql_report_queries',
-            PARAM_URL,
-            40
+        new $passwordsetting(
+            'block_configurable_reports/' . \block_configurable_reports\report_repository::TOKEN_SETTING,
+            get_string('reportrepositorytoken', 'block_configurable_reports'),
+            get_string('reportrepositorytokeninfo', 'block_configurable_reports'),
+            ''
         )
     );
 

@@ -10,15 +10,15 @@ define(
         'require'
     ], function($, tablesorter, dataTable, CodeMirror, sql, Config, Notification, require) {
 
-        // The editor wrapping the remote query textarea, when syntax highlighting is on. Setting the
+        // The editor wrapping the SQL query textarea, when syntax highlighting is on. Setting the
         // textarea's own value is not enough once CodeMirror has taken it over.
-        var remoteeditor = null;
+        var queryeditor = null;
 
         // The course the AJAX scripts check access in. Totara has no M.cfg.courseId, so PHP gives it.
         var courseid = null;
 
         /**
-         * Ask one of the plugin's AJAX scripts for a category listing or a report.
+         * Ask one of the plugin's AJAX scripts for data.
          *
          * @param {String} script The script to call, relative to the plugin.
          * @param {Object} params The parameters it takes, beyond the course and the sesskey.
@@ -43,21 +43,6 @@ define(
                 }
                 return data;
             });
-        };
-
-        /**
-         * Build an option element. The value and the text come from the repository, so neither is
-         * parsed as HTML.
-         *
-         * @param {String} value
-         * @param {String} text
-         * @return {HTMLElement}
-         */
-        var option = function(value, text) {
-            var element = document.createElement('option');
-            element.value = value;
-            element.textContent = text;
-            return element;
         };
 
         return {
@@ -131,7 +116,7 @@ define(
                 // Documentation can be found @ http://codemirror.net/
                 var query = document.getElementById('id_querysql');
                 if (query) {
-                    CodeMirror.fromTextArea(query, {
+                    queryeditor = CodeMirror.fromTextArea(query, {
                         mode: "text/x-mysql",
                         rtlMoveVisually: true,
                         indentWithTabs: true,
@@ -140,69 +125,62 @@ define(
                         autofocus: true,
                     });
                 }
-
-                // Only on the page when a remote report repository is configured.
-                var remotequery = document.getElementById('id_remotequerysql');
-                if (remotequery) {
-                    remoteeditor = CodeMirror.fromTextArea(remotequery, {
-                        mode: "text/x-mysql",
-                        rtlMoveVisually: true,
-                        indentWithTabs: true,
-                        smartIndent: true,
-                        lineNumbers: true,
-                        //    autofocus: true
-                    });
-                }
             },
-            remote_reports: function(course) {
+            remote_reports: function(course, strings) {
                 courseid = course;
-                var categories = document.getElementById('id_reportcategories');
-                var reports = document.getElementById('id_reportsincategory');
-                var query = document.getElementById('id_remotequerysql');
+                var reports = document.getElementById('id_repositoryreport');
 
-                // All three are added together, and only when a repository is configured.
-                if (!categories || !reports || !query) {
+                // Only on the page when the report repository could be read.
+                if (!reports) {
                     return;
                 }
 
-                categories.addEventListener('change', function() {
-                    // Keep the placeholder the form rendered, drop the previous category's reports.
-                    while (reports.options.length > 1) {
-                        reports.remove(1);
-                    }
-                    reports.selectedIndex = 0;
-
-                    // The placeholder itself names no category to list.
-                    if (categories.selectedIndex <= 0) {
+                /**
+                 * Fill a field with one part of the chosen repository report.
+                 *
+                 * @param {String} buttonid The button that pulls the part.
+                 * @param {String} part 'sql' or 'datatables'.
+                 * @param {String} fieldid The field that the part goes in.
+                 * @param {String} confirmation The question to ask before the field's text is replaced.
+                 */
+                var pull = function(buttonid, part, fieldid, confirmation) {
+                    var button = document.getElementById(buttonid);
+                    var field = document.getElementById(fieldid);
+                    if (!button || !field) {
                         return;
                     }
 
-                    request('list_reports_in_category.php', {category: categories.value})
-                        .then(function(list) {
-                            list.forEach(function(report) {
-                                reports.appendChild(option(report.fullname, report.name));
-                            });
-                            return;
-                        })
-                        .catch(Notification.exception);
-                });
+                    // The SQL field is a CodeMirror editor when syntax highlighting is on.
+                    var editor = function() {
+                        return fieldid === 'id_querysql' ? queryeditor : null;
+                    };
+                    var fill = function() {
+                        request('repository.php', {path: reports.value, part: part})
+                            .then(function(response) {
+                                field.value = response.content;
+                                if (editor()) {
+                                    editor().setValue(response.content);
+                                }
+                                return;
+                            })
+                            .catch(Notification.exception);
+                    };
 
-                reports.addEventListener('change', function() {
-                    // The placeholder, and a list cleared from under a selection, name no report.
-                    if (reports.selectedIndex <= 0) {
-                        return;
-                    }
-
-                    request('get_remote_report.php', {reportname: reports.value})
-                        .then(function(response) {
-                            query.value = response;
-                            if (remoteeditor) {
-                                remoteeditor.setValue(response);
-                            }
+                    button.addEventListener('click', function() {
+                        if (!reports.value) {
                             return;
-                        })
-                        .catch(Notification.exception);
-                });
+                        }
+                        var text = editor() ? editor().getValue() : field.value;
+                        if (text.trim() === '') {
+                            fill();
+                            return;
+                        }
+                        Notification.confirm(button.textContent, confirmation, strings.yes, strings.cancel, fill);
+                    });
+                };
+
+                pull('id_pullsql', 'sql', 'id_querysql', strings.confirmsql);
+                pull('id_pulldatatables', 'datatables', 'id_datatablesconfig', strings.confirmdatatables);
             }
         };
     });

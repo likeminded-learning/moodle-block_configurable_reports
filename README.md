@@ -21,7 +21,17 @@ This fork of [jleyva/moodle-block_configurable_reports](https://github.com/jleyv
   Options saved by the 2019 fork are converted when a report is viewed or edited.
 - **DataTables Buttons and RowGroup** extensions, for column visibility,
   print and row grouping.
-- **Report table styles**: the DataTables 1.13.7 default theme ("display" class), as on datatables.net.
+- **Report table styles**: the DataTables 1.13.7 default theme ("display" class), as on datatables.net,
+  with a header colour and clear alternate rows.
+- **Report repository.** Shared SQL reports come from a GitHub repository
+  (setting "Report repository", `owner/repo@ref`, with a read-only token for a
+  private repository). This replaces the two jleyva repository settings. Each
+  report is a folder with `report.json`, `query.sql` (MySQL), `query.pgsql.sql`
+  (PostgreSQL) and `datatables.json`; see the README of
+  [likeminded-learning/totara-configurable-reports](https://github.com/likeminded-learning/totara-configurable-reports).
+  Manage reports can create a report from the repository and export a report
+  in its format. The Custom SQL tab can pull only the SQL or only the
+  DataTables options of a repository report.
 
 To update from upstream, merge `MOODLE_4x_STABLE` into this branch. The Totara
 changes are in separate commits, to make conflicts easy to find.

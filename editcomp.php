@@ -57,8 +57,6 @@ $PAGE->set_url('/blocks/configurable_reports/editreport.php', ['id' => $id, 'com
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('incourse');
 
-$PAGE->requires->js('/blocks/configurable_reports/js/configurable_reports.js');
-
 $hasreportscap = has_capability('block/configurable_reports:managereports', $context);
 if (!$hasreportscap && !has_capability('block/configurable_reports:manageownreports', $context)) {
     throw new moodle_exception('badpermissions', 'block_configurable_reports');

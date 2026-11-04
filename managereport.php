@@ -26,9 +26,11 @@
 require_once("../../config.php");
 require_once($CFG->dirroot . "/blocks/configurable_reports/locallib.php");
 require_once('import_form.php');
+require_once('repository_form.php');
+
+use block_configurable_reports\report_repository;
 
 $courseid = optional_param('courseid', SITEID, PARAM_INT);
-$importurl = optional_param('importurl', '', PARAM_RAW);
 
 if (!$course = $DB->get_record("course", ['id' => $courseid])) {
     throw new moodle_exception("No such course id");
@@ -52,34 +54,6 @@ $PAGE->set_url('/blocks/configurable_reports/managereport.php', ['courseid' => $
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('incourse');
 
-if ($importurl) {
-    require_sesskey();
-
-    // Only allow importing from the configured GitHub repository.
-    $repository = get_config('block_configurable_reports', 'crrepository');
-    $allowedprefix = 'https://api.github.com/repos/' . $repository . '/';
-    if (empty($repository) || strpos($importurl, $allowedprefix) !== 0 || strpos($importurl, '..') !== false) {
-        throw new moodle_exception('errorimporting', 'block_configurable_reports');
-    }
-
-    $c = new curl();
-    if ($data = $c->get($importurl, [], ['CURLOPT_SSL_VERIFYPEER' => true])) {
-        $data = json_decode($data);
-        $xml = base64_decode($data->content);
-    } else {
-        throw new moodle_exception('errorimporting', 'block_configurable_reports');
-    }
-
-    if (cr_import_xml($xml, $course)) {
-        redirect(
-            "$CFG->wwwroot/blocks/configurable_reports/managereport.php?courseid={$course->id}",
-            get_string('reportcreated', 'block_configurable_reports')
-        );
-    } else {
-        throw new moodle_exception('errorimporting', 'block_configurable_reports');
-    }
-}
-
 $mform = new import_form(null, $course->id);
 
 if ($data = $mform->get_data()) {
@@ -95,6 +69,27 @@ if ($data = $mform->get_data()) {
     }
 }
 
+// Reports from the report repository. Only SQL reports are in it.
+$repositoryform = null;
+$repositoryerror = '';
+if (block_configurable_reports_can_managesqlreports($context) && $repository = report_repository::from_config()) {
+    try {
+        $repositoryform = new repository_form(null, ['repository' => $repository, 'courseid' => $course->id]);
+    } catch (moodle_exception $e) {
+        // The page still works without the repository, so show why it is not there.
+        $repositoryerror = $e->getMessage();
+    }
+}
+
+if ($repositoryform && $data = $repositoryform->get_data()) {
+    $entry = $repository->get_report($data->repositoryreport, $DB->get_dbfamily());
+    $newreport = report_repository::build_report($entry, $course->id, $USER->id);
+    $newreport->id = $DB->insert_record('block_configurable_reports', $newreport);
+    \block_configurable_reports\event\report_created::create_from_report($newreport, null, ['imported' => true])->trigger();
+    redirect(new moodle_url('/blocks/configurable_reports/editreport.php', ['id' => $newreport->id]),
+        get_string('reportcreated', 'block_configurable_reports'));
+}
+
 $reports = cr_get_my_reports($course->id, $USER->id);
 
 $title = get_string('reports', 'block_configurable_reports');
@@ -104,12 +99,6 @@ $PAGE->navbar->add(get_string('managereports', 'block_configurable_reports'));
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_cacheable(true);
-$jsmodule = [
-    'name' => 'block_configurable_reports',
-    'fullpath' => '/blocks/configurable_reports/js/configurable_reports.js',
-    'requires' => ['io', 'json-parse'],
-];
-$PAGE->requires->js_init_call('M.block_configurable_reports.loadReportCategories', [$course->id], false, $jsmodule);
 
 echo $OUTPUT->header();
 
@@ -132,6 +121,7 @@ if ($reports) {
     $strshow = get_string('show');
     $strcopy = get_string('duplicate');
     $strexport = get_string('exportreport', 'block_configurable_reports');
+    $strexportrepository = get_string('exportrepository', 'block_configurable_reports');
     $exportformats = cr_get_export_plugins();
 
     foreach ($reports as $r) {
@@ -180,6 +170,12 @@ if ($reports) {
             $editcell .= '<a title="' . $strexport . '" href="export.php?id=' . $r->id . '&amp;sesskey=' . $USER->sesskey . '">' .
                 $OUTPUT->pix_icon('t/backup', $strexport) .
                 '</a>&nbsp;&nbsp;';
+            if ($r->type === report_repository::REPORT_TYPE) {
+                $url = new moodle_url('/blocks/configurable_reports/export_repository.php',
+                    ['id' => $r->id, 'sesskey' => sesskey()]);
+                $editcell .= html_writer::link($url, $OUTPUT->pix_icon('t/download', $strexportrepository),
+                    ['title' => $strexportrepository]) . '&nbsp;&nbsp;';
+            }
 
         }
 
@@ -223,32 +219,10 @@ echo $OUTPUT->heading(
     '</a> </div>'
 );
 
-// Repository report import.
-if ($userandrepo = get_config('block_configurable_reports', 'crrepository')) {
-    echo html_writer::start_tag('div', ['class' => 'mform']);
-    echo html_writer::start_tag('fieldset');
-    echo html_writer::tag('legend', get_string('importfromrepository', 'block_configurable_reports'));
-
-    echo $OUTPUT->help_icon('repository', 'block_configurable_reports') . "&nbsp;&nbsp;";
-
-    $reportcategories = ['' => '...'];
-    echo get_string('categories', 'block_configurable_reports');
-
-    $attrs = [
-        'onchange' => 'M.block_configurable_reports.onchange_crreportcategories(this,"' . sesskey() . '")',
-        'id' => 'id_crreportcategories',
-    ];
-    echo html_writer::select($reportcategories, 'crreportcategories', '', null, $attrs);
-    echo get_string('report', 'block_configurable_reports');
-
-    $attrs = [
-        'onchange' => 'M.block_configurable_reports.onchange_crreportnames(this,"' . sesskey() . '")',
-        'id' => 'id_crreportnames',
-    ];
-    echo html_writer::select([], 'crreportnames', '', [], $attrs);
-
-    echo html_writer::end_tag('fieldset');
-    echo html_writer::end_tag('div');
+if ($repositoryform) {
+    $repositoryform->display();
+} else if ($repositoryerror !== '') {
+    echo $OUTPUT->notification(s($repositoryerror), 'notifyproblem');
 }
 
 $mform->display();
