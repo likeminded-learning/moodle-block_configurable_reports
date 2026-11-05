@@ -45,6 +45,83 @@ define(
             });
         };
 
+        /**
+         * Post values to a bulk action page in a new form.
+         *
+         * @param {String} url The action page.
+         * @param {String[]} values The checkbox column text of the selected rows.
+         * @param {Number} reportid The report id.
+         */
+        var postAction = function(url, values, reportid) {
+            var form = document.createElement('form');
+            form.method = 'post';
+            form.action = url;
+            var add = function(name, value) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            };
+            values.forEach(function(value) {
+                add('values[]', value);
+            });
+            add('reportid', reportid);
+            add('sesskey', Config.sesskey);
+            add('returnurl', window.location.href);
+            document.body.appendChild(form);
+            form.submit();
+        };
+
+        /**
+         * Add a button over the table for each bulk action. A button posts the selected rows.
+         *
+         * @param {DataTable.Api} table The report table.
+         * @param {Object[]} actions The actions: id, label and url.
+         * @param {Number} reportid The report id.
+         */
+        var addActions = function(table, actions, reportid) {
+            // Select gives its checkbox renderer this name. The column holds the value of each row.
+            var column = table.columns().indexes().toArray().find(function(index) {
+                var render = table.column(index).init().render;
+                return render && render._name === 'selectCheckbox';
+            });
+            if (column === undefined) {
+                window.console.warn('The report asks for bulk actions, but it has no "render": "select" column.');
+                return;
+            }
+
+            var bar = document.createElement('div');
+            bar.className = 'cr-bulkactions mb-2';
+            bar.setAttribute('role', 'group');
+            bar.setAttribute('aria-label', M.str.block_configurable_reports.bulkactions);
+            var buttons = actions.map(function(action) {
+                var button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-secondary mr-2';
+                button.dataset.label = action.label;
+                button.addEventListener('click', function() {
+                    // The raw cell data, not the checkbox that the renderer shows.
+                    var values = table.rows({selected: true}).data().toArray().map(function(row) {
+                        return String(row[column]).trim();
+                    });
+                    postAction(action.url, values, reportid);
+                });
+                bar.appendChild(button);
+                return button;
+            });
+            var update = function() {
+                var count = table.rows({selected: true}).count();
+                buttons.forEach(function(button) {
+                    button.disabled = count === 0;
+                    button.textContent = button.dataset.label + ' (' + count + ')';
+                });
+            };
+            table.on('select deselect draw', update);
+            table.table().container().before(bar);
+            update();
+        };
+
         return {
             js_order: function(params) {
                 $(params.selector).tablesorter();
@@ -117,7 +194,10 @@ define(
                     // The 'display' class gives the DataTables default style: row lines, stripes, hover and ordered column.
                     var table = document.querySelector(params.selector);
                     table.classList.add('display');
-                    new DataTable(table, options);
+                    var api = new DataTable(table, options);
+                    if (params.actions && params.actions.length) {
+                        addActions(api, params.actions, params.reportid);
+                    }
                 });
             },
             cmirror: function(options) {

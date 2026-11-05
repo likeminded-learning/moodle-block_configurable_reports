@@ -40,6 +40,22 @@ class datatables_config {
     /** @var string The key of the language options. The defaults supply them from the language strings. */
     const LANGUAGE_KEY = 'oLanguage';
 
+    /** @var string The key of the bulk action ids. It is not a DataTables option. See hook\report_actions. */
+    const ACTIONS_KEY = 'actions';
+
+    /**
+     * Remove the bulk action ids from the options, before the options go to DataTables.
+     *
+     * @param stdClass $options The decoded options. The method removes the actions key.
+     * @return string[] The action ids. Values that are not strings are ignored.
+     */
+    public static function take_actions(stdClass $options): array {
+        $ids = $options->{self::ACTIONS_KEY} ?? [];
+        unset($options->{self::ACTIONS_KEY});
+
+        return is_array($ids) ? array_values(array_filter($ids, 'is_string')) : [];
+    }
+
     /**
      * Get the options of a report.
      *

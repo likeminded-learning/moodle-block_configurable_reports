@@ -533,6 +533,7 @@ $string['datatables_loadingrecords'] = 'Loading...';
 $string['datatables_processing'] = 'Processing...';
 $string['datatables_search'] = 'Search:';
 $string['datatables_zerorecords'] = 'No matching records found';
+$string['bulkactions'] = 'Actions for the selected rows';
 $string['datatablesconfig'] = 'DataTables options';
 $string['datatablesconfig_help'] = 'Options for the DataTables report table, as a JSON object. They replace the default options with the same keys. Leave empty to use the defaults. The language options come from the language strings.
 
@@ -542,6 +543,7 @@ Examples:
 * Group the rows by the 4th column and hide it: `{"rowGroup": {"dataSrc": 3}, "columnDefs": [{"targets": [3], "visible": false}]}`
 * Add buttons to show or hide columns and to print: `{"layout": {"topStart": ["buttons", "pageLength"]}, "buttons": ["colvis", "print"]}`
 * Add a row checkbox column, with a header checkbox that selects all rows that match the search, on all pages: `{"columnDefs": [{"targets": 0, "render": "select", "orderable": false}], "select": {"style": "multi", "selector": "td:first-child", "headerCheckbox": true}}`
+* Add bulk action buttons (Totara): add the checkbox column above, then `"actions": ["local_reportactions/unenrol"]`. A plugin must give the action. The button posts the checkbox column text of each selected row to the action page.
 
 See <https://datatables.net/reference/option/>.';
 $string['datatablesconfiginvalid'] = 'The DataTables options must be a JSON object, for example {"paging": false}. Do not use functions or variables.';

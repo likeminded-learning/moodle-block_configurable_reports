@@ -154,4 +154,16 @@ final class datatables_config_test extends advanced_testcase {
             'unclosed string' => ["{ 'paging: false }"],
         ];
     }
+
+    /**
+     * The bulk action ids leave the options, so that DataTables does not get them.
+     */
+    public function test_take_actions_removes_the_ids(): void {
+        $options = datatables_config::decode('{"actions": ["local_reportactions/unenrol", 5], "paging": false}');
+
+        $this->assertSame(['local_reportactions/unenrol'], datatables_config::take_actions($options));
+        $this->assertEquals((object) ['paging' => false], $options);
+        $this->assertSame([], datatables_config::take_actions($options));
+        $this->assertSame([], datatables_config::take_actions((object) ['actions' => 'local_reportactions/unenrol']));
+    }
 }

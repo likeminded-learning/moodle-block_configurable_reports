@@ -56,12 +56,17 @@ function cr_print_js_function() {
  * @param string $cssid
  * @param moodle_page $page
  * @param stdClass|null $options DataTables options of the report. They replace the defaults with the same keys.
+ * @param array[] $actions bulk actions from report::get_bulk_actions(): a button for each, over the table
+ * @param int $reportid the report id that the action buttons post
  * @return void
  */
-function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $options = null) {
+function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $options = null, array $actions = [],
+        int $reportid = 0) {
     $data = [];
     $data['selector'] = $cssid;
     $data['options'] = $options;
+    $data['actions'] = $actions;
+    $data['reportid'] = $reportid;
 
     $page->requires->string_for_js('thousandssep', 'langconfig');
     $page->requires->strings_for_js(
@@ -79,6 +84,7 @@ function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $option
             'datatables_processing',
             'datatables_search',
             'datatables_zerorecords',
+            'bulkactions',
         ],
         'block_configurable_reports'
     );
