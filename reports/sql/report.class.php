@@ -188,9 +188,16 @@ class report_sql extends report_base {
 
         // %%FILTER_VAR%% is replaced with the filter_var URL parameter, always bound as a value, so it can be used
         // anywhere a value is valid: "WHERE cm.id = %%FILTER_VAR%%", "<= %%FILTER_VAR%% * 86400"...
+        // Reports written for the old text replacement put it in quotes: '%%FILTER_VAR%%' is one text value, also
+        // when it is empty, so "'%%FILTER_VAR%%' = ''" still finds no value.
         $filtervar = trim(optional_param('filter_var', '', PARAM_RAW));
         $i = 0;
-        $sql = preg_replace_callback('/%%FILTER_VAR%%/', function(array $match) use (&$i, &$params, $filtervar, $sql): string {
+        $sql = preg_replace_callback("/'%%FILTER_VAR%%'|%%FILTER_VAR%%/", function(array $match) use (&$i, &$params, $filtervar, $sql): string {
+            if ($match[0][0][0] === "'") {
+                $name = 'filtervar' . ++$i;
+                $params[$name] = $filtervar;
+                return ':' . $name;
+            }
             if ($filtervar === '') {
                 // Without a value, a placeholder used as a value is NULL, so the report shows no rows instead of
                 // failing. Anywhere else it is removed, as in reports that add a whole condition with it.

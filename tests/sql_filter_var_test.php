@@ -35,6 +35,11 @@ require_once($CFG->dirroot . '/blocks/configurable_reports/locallib.php');
 require_once($CFG->dirroot . '/blocks/configurable_reports/report.class.php');
 require_once($CFG->dirroot . '/blocks/configurable_reports/reports/sql/report.class.php');
 
+// Totara has no advanced_testcase. A class whose parent is not known yet is declared when this line has run.
+if (!class_exists('advanced_testcase')) {
+    class_alias(\core_phpunit\testcase::class, 'advanced_testcase');
+}
+
 /**
  * Tests for report_sql::prepare_sql() handling of filter_var
  *
@@ -169,6 +174,26 @@ final class sql_filter_var_test extends advanced_testcase {
         [$sql, $params] = $this->prepare('', $query);
         $this->assertSame('SELECT u.id FROM {user} u WHERE u.deleted = 0  ORDER BY u.id', $sql);
         $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Reports written for the old text replacement put the placeholder in quotes. The quoted placeholder is one
+     * text value, so these reports keep working, with or without a value.
+     */
+    public function test_quoted_placeholder_is_one_text_value(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $query = "SELECT u.id FROM {user} u WHERE ('%%FILTER_VAR%%' = '' OR u.id = '%%FILTER_VAR%%') AND u.deleted = 0";
+
+        [$sql, $params] = $this->prepare((string) $USER->id, $query);
+        $this->assertSame("SELECT u.id FROM {user} u WHERE (:filtervar1 = '' OR u.id = :filtervar2) AND u.deleted = 0", $sql);
+        $this->assertSame(['filtervar1' => (string) $USER->id, 'filtervar2' => (string) $USER->id], $params);
+        $this->assertEquals([$USER->id], array_keys($DB->get_records_sql($sql, $params)), 'one user');
+
+        [$sql, $params] = $this->prepare('', $query);
+        $this->assertSame(['filtervar1' => '', 'filtervar2' => ''], $params);
+        $this->assertEquals($DB->count_records('user', ['deleted' => 0]), count($DB->get_records_sql($sql, $params)), 'all users');
     }
 
     /**
