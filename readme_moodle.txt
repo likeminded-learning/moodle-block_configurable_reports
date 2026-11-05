@@ -41,36 +41,109 @@ DataTables
 =======================
 https://cdn.datatables.net/releases.html
 
-Instructions to import 'DataTables' into Moodle:
+Instructions to import 'DataTables' into Moodle (Likeminded fork: DataTables 3):
 
-1. Download the latest release for 'jquery.dataTables.js' from
-https://cdn.datatables.net/releases.html
+1. Download the npm packages 'datatables.net' and 'datatables.net-dt' of the
+same version, for example: npm pack datatables.net@3.1.5 datatables.net-dt@3.1.5
 
-2. Copy 'jquery.dataTables.js' into 'amd/src/jquery.dataTables.js':
+2. Copy 'js/dataTables.js' into 'amd/src/jquery.dataTables.js':
 
-   2.a. Add /*eslint-ignore*/ to the beginning of the file.
+   2.a. Add /*eslint-disable*/ to the beginning of the file.
 
-3. Download 'css/jquery.dataTables.css' and replace all the references from:
+   2.b. DataTables 3 does not need jQuery. Give it the page jQuery, so that
+   $.fn.dataTable and the jQuery events ('init.dt') work. Replace the AMD define:
    ------------------
-    url('../images/xxxxx.png')
+		define([], function () {
+			return factory(window, document);
+		});
    ------------------
 
    to
    ------------------
-    url([[pix:block_configurable_reports|datatable/xxxxx]])
+		define(['jquery'], function ($) {
+			var DataTable = factory(window, document);
+			DataTable.use($);
+			return DataTable;
+		});
    ------------------
 
-4. Copy the new 'css/jquery.dataTables.css' after replacing the references to
-the image folder into the "DataTables styles" section in 'styles.css'.
+3. Put 'css/dataTables.dataTables.css' of 'datatables.net-dt' into the
+"DataTables styles" section in 'styles.css'. It has no images.
 
-   4.a. Prefix every selector with '#page-blocks-configurable_reports-viewreport '.
+   3.a. Prefix every selector with '#page-blocks-configurable_reports-viewreport '.
    Moodle serves each plugin's styles.css on every page of the site, so selectors
    as broad as 'table.dataTable' would otherwise restyle the tables of any other
    plugin that uses DataTables.
 
-5. Execute grunt to compile js
+   3.b. Remove the '@charset' line. Change the ':root' selector, which holds the
+   '--dt-*' colour variables, to '#page-blocks-configurable_reports-viewreport'.
+
+4. Execute grunt to compile js, then remove the module names (see below).
    grunt js
 
+
+
+=======================
+Totara: AMD builds without module names (Likeminded fork)
+=======================
+Totara adds the module name to the first "define(" of each AMD file when it serves it.
+A build that already names its module, as the Moodle 4 grunt builds do, then has two
+names, and RequireJS reads the module as a string. After a merge from upstream or a
+rebuild, remove the names from the builds:
+
+    sed -i -E '0,/define\("block_configurable_reports\/[^"]+",\s*/s//define(/' amd/build/*.min.js
+
+
+=======================
+CodeMirror 6 SQL editor (Likeminded fork)
+=======================
+The Custom SQL form uses CodeMirror 6 with @codemirror/lang-sql: the dialect of the site
+database, completion of prefix_ tables, columns and %%...%% placeholders, and a mark for
+unbalanced brackets. The source is cm6/src/sqleditor.js; the versions are pinned in
+cm6/package.json. CodeMirror 6 is only published as ES modules, so esbuild bundles it into
+one AMD module:
+
+    cd cm6 && npm ci --ignore-scripts && ./build.sh
+
+This writes amd/src/sqleditor-lazy.js and amd/build/sqleditor-lazy.min.js. The "-lazy"
+name keeps the module out of the JavaScript that every page loads. The CodeMirror 5 files
+above stay for merges from upstream, but main.js does not use them.
+
+
+=======================
+DataTables extensions (Buttons, RowGroup, Select)
+=======================
+https://www.npmjs.com/package/datatables.net
+
+Use the extension releases made for the DataTables version in
+'amd/src/jquery.dataTables.js' (see the "peerDependencies" of each package).
+They are free (MIT). Only the "DataTables Plus" extensions, such as Editor, are paid.
+
+1. Download the npm packages 'datatables.net-buttons', 'datatables.net-rowgroup'
+and 'datatables.net-select', and their '-dt' style packages. Take these files:
+   js/dataTables.buttons.js
+   js/buttons.colVis.js
+   js/buttons.print.js
+   js/dataTables.rowGroup.js
+   js/dataTables.select.js
+
+2. Copy each one into 'amd/src/' with the same name:
+
+   2.a. Add /*eslint-disable*/ to the beginning of the file.
+
+   2.b. In the define() call only, replace the module names:
+   ------------------
+    'datatables.net'          -> 'block_configurable_reports/jquery.dataTables'
+    'datatables.net-buttons'  -> 'block_configurable_reports/dataTables.buttons'
+   ------------------
+
+3. Take 'css/buttons.dataTables.css', 'css/rowGroup.dataTables.css' and
+'css/select.dataTables.css'. Prefix them as in step 3 above, and put them into
+the "DataTables Buttons styles", "DataTables RowGroup styles" and
+"DataTables Select styles" sections in 'styles.css'.
+
+4. Execute grunt to compile js
+   grunt js
 
 
 =======================

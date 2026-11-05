@@ -37,7 +37,7 @@ class component_customsql extends component_base {
      * @return void
      */
     public function init(): void {
-        global $PAGE;
+        global $COURSE, $PAGE;
 
         $this->plugins = false;
         $this->ordering = false;
@@ -45,11 +45,26 @@ class component_customsql extends component_base {
         $this->help = true;
 
         if (get_config('block_configurable_reports', 'sqlsyntaxhighlight')) {
-            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'cmirror');
+            // Totara has no M.cfg.courseId, so give the course to the script.
+            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'cmirror', [[
+                'courseid' => $COURSE->id,
+                'dialect' => cr_sql_dialect(),
+                'placeholders' => cr_sql_placeholders(),
+                'syntaxerror' => get_string('sqlsyntaxerror', 'block_configurable_reports'),
+            ]]);
         }
 
-        if (get_config('block_configurable_reports', 'sharedsqlrepository')) {
-            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports');
+        if (get_config('block_configurable_reports', \block_configurable_reports\report_repository::SETTING)) {
+            // Totara has no M.cfg.courseId, so give the course to the script.
+            $strings = [
+                'confirmsql' => get_string('pulloverwrite', 'block_configurable_reports',
+                    get_string('querysql', 'block_configurable_reports')),
+                'confirmdatatables' => get_string('pulloverwrite', 'block_configurable_reports',
+                    get_string('datatablesconfig', 'block_configurable_reports')),
+                'yes' => get_string('yes'),
+                'cancel' => get_string('cancel'),
+            ];
+            $PAGE->requires->js_call_amd('block_configurable_reports/main', 'remote_reports', [$COURSE->id, $strings]);
         }
     }
 

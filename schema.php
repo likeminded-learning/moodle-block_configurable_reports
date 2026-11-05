@@ -15,44 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Configurable Reports a Moodle block for creating customizable reports
+ * Get the tables and columns of the database, for the completion of the SQL editor.
  *
- * @copyright  2020 Juan Leyva <juan@moodle.com>
  * @package    block_configurable_reports
- * @author     Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @copyright  2026 Likeminded Learning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 define('AJAX_SCRIPT', true);
 require(dirname(__FILE__, 3) . '/config.php');
-require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/blocks/configurable_reports/locallib.php');
 
 $context = block_configurable_reports_require_course_login();
+require_sesskey();
 if (!block_configurable_reports_can_managesqlreports($context)) {
     throw new moodle_exception('nosqlpermissions', 'block_configurable_reports');
 }
-$category = required_param('category', PARAM_PATH);
 
-if (!$userandrepo = get_config('block_configurable_reports', 'sharedsqlrepository')) {
-    echo json_encode([]);
-    die;
+// Table names without the prefix: the SQL writes them as prefix_<name>. The database meta cache keeps this fast.
+$tables = [];
+foreach ($DB->get_tables() as $table) {
+    $tables[$table] = array_keys($DB->get_columns($table));
 }
+ksort($tables);
 
-$github = new \block_configurable_reports\github;
-$github->set_repo($userandrepo);
-$res = $github->get('/contents/' . $category);
-
-$res = json_decode($res);
-
-$reportlist = [];
-foreach ($res as $item) {
-    $report = new stdClass();
-    $report->name = str_replace($category . '/', '', $item->path);
-    $report->fullname = $item->path;
-    if ($item->type === 'file') {
-        $reportlist[] = $report;
-    }
-}
-
-echo json_encode($reportlist);
+echo json_encode(['tables' => $tables]);

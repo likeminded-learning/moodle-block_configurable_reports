@@ -65,284 +65,1600 @@
 }
 
 
+/* Likeminded: no frame round the DataTables table, as on datatables.net. */
+#page-blocks-configurable_reports-viewreport table.dataTable.generaltable {
+    border: 0;
+}
+
+/* Likeminded colours on the DataTables default theme: a header colour and clear alternate rows.
+ * The theme shades cells with box-shadow overlays, which these background colours replace. */
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > thead > tr > th {
+    background-color: #f1f3f5;
+    color: #212529;
+    font-weight: bold;
+    border-bottom: 2px solid #adb5bd;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr > * {
+    box-shadow: none;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr:nth-child(odd) > td {
+    background-color: #ffffff;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr:nth-child(even) > td {
+    background-color: #f6f8fa;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr:hover > td {
+    background-color: #e9ecef;
+}
+
+/* Rows that the Select checkbox selects. The theme marks them with a box-shadow, which the rule above removes. */
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.selected > td {
+    background-color: #cfe2ff;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.dtrg-group > th {
+    background-color: #eef0f2;
+}
+
+#page-blocks-configurable_reports-viewreport #reporttable_wrapper table.dataTable > tbody > tr.dtrg-group.dtrg-level-0 > th {
+    background-color: #dee2e6;
+    font-weight: bold;
+}
+
 /* DataTables styles */
 /* stylelint-disable -- Copied from the DataTables and CodeMirror releases, see readme_moodle.txt. */
+#page-blocks-configurable_reports-viewreport {
+  --dt_background-selected: 13, 110, 253;
+  --dt_color-selected: 255, 255, 255;
+  --dt_link_color-selected: 228, 228, 228;
+  --dt-row_background: transparent;
+  --dt-row_background-selected: var(--dt_background-selected);
+  --dt-row-text_color-selected: var(--dt_color-selected);
+  --dt-row-link_color-selected: var(--dt_link_color-selected);
+  --dt-row_background-stripe: 0, 0, 0;
+  --dt-row_background-hover: 0, 0, 0;
+  --dt-column-ordering_background: 0, 0, 0;
+  --dt-header-cell_align-items: center;
+  --dt-header-cell_vertical-align: middle;
+  --dt-html_background: white;
+}
+#page-blocks-configurable_reports-viewreport :root.dark {
+  --dt-html_background: rgb(33, 37, 41);
+}
+
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-control {
+  text-align: center;
+  cursor: pointer;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-control:before {
+  display: inline-block;
+  box-sizing: border-box;
+  content: "";
+  border-top: 5px solid transparent;
+  border-left: 10px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid transparent;
+  border-right: 0px solid transparent;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody tr.dt-hasChild td.dt-control:before {
+  border-top: 10px solid rgba(0, 0, 0, 0.5);
+  border-left: 5px solid transparent;
+  border-bottom: 0px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+#page-blocks-configurable_reports-viewreport :root.dark table.dataTable td.dt-control:before,
+#page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable td.dt-control:before,
+#page-blocks-configurable_reports-viewreport :root[data-theme=dark] table.dataTable td.dt-control:before {
+  border-left-color: rgba(255, 255, 255, 0.5);
+}
+#page-blocks-configurable_reports-viewreport :root.dark table.dataTable tr.dt-hasChild td.dt-control:before,
+#page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable tr.dt-hasChild td.dt-control:before,
+#page-blocks-configurable_reports-viewreport :root[data-theme=dark] table.dataTable tr.dt-hasChild td.dt-control:before {
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: transparent;
+}
+
+#page-blocks-configurable_reports-viewreport div.dt-scroll {
+  width: 100%;
+}
+
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body thead tr,
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body tfoot tr {
+  height: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body thead tr th, #page-blocks-configurable_reports-viewreport div.dt-scroll-body thead tr td, #page-blocks-configurable_reports-viewreport div.dt-scroll-body tfoot tr th, #page-blocks-configurable_reports-viewreport div.dt-scroll-body tfoot tr td {
+  height: 0 !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  border-top-width: 0px !important;
+  border-bottom-width: 0px !important;
+}
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body thead tr th div.dt-scroll-sizing, #page-blocks-configurable_reports-viewreport div.dt-scroll-body thead tr td div.dt-scroll-sizing, #page-blocks-configurable_reports-viewreport div.dt-scroll-body tfoot tr th div.dt-scroll-sizing, #page-blocks-configurable_reports-viewreport div.dt-scroll-body tfoot tr td div.dt-scroll-sizing {
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+#page-blocks-configurable_reports-viewreport {
+  --dt-order-arrow_color: rgb(51, 51, 51);
+  --dt-order-arrow_color-current: rgb(51, 51, 51);
+  --dt-order-arrow-height: 7px;
+  --dt-order-arrow_opacity: 0.125;
+  --dt-order-arrow_opacity-current: 0.65;
+  --dt-order-arrow-width: 8px;
+  --dt-order-arrow-gap: 1px;
+  --dt-order-header_outline-hover: 2px solid rgba(0, 0, 0, 0.05);
+}
+#page-blocks-configurable_reports-viewreport :root.dark, #page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark], #page-blocks-configurable_reports-viewreport :root[data-theme=dark] {
+  --dt-order-arrow_color: rgb(229, 233, 238);
+  --dt-order-arrow_color-current: rgb(229, 233, 238);
+  --dt-order-header_outline-hover: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th:active,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td:active {
+  outline: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-asc .dt-column-order:before {
+  bottom: calc(50% + var(--dt-order-arrow-gap));
+  border-bottom: var(--dt-order-arrow-height) solid var(--dt-order-arrow_color);
+  border-left: calc(var(--dt-order-arrow-width) / 2) solid transparent;
+  border-right: calc(var(--dt-order-arrow-width) / 2) solid transparent;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-desc .dt-column-order:after {
+  top: calc(50% + 1px);
+  border-top: var(--dt-order-arrow-height) solid var(--dt-order-arrow_color);
+  border-left: calc(var(--dt-order-arrow-width) / 2) solid transparent;
+  border-right: calc(var(--dt-order-arrow-width) / 2) solid transparent;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-asc .dt-column-order, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-desc .dt-column-order {
+  position: relative;
+  width: var(--dt-order-arrow-width);
+  align-self: stretch;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-asc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-asc .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-desc .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-desc .dt-column-order:after {
+  position: absolute;
+  display: block;
+  content: " ";
+  height: 0;
+  width: 0;
+  left: 0;
+  color: var(--dt-order-arrow_color);
+  opacity: var(--dt-order-arrow_opacity);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc {
+  cursor: pointer;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-desc:hover, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-desc:hover {
+  outline: var(--dt-order-header_outline-hover);
+  outline-offset: -2px;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order:before,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-asc .dt-column-order:before {
+  border-bottom-color: var(--dt-order-arrow_color-current);
+  opacity: var(--dt-order-arrow_opacity-current);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order:after,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-ordering-desc .dt-column-order:after {
+  border-top-color: var(--dt-order-arrow_color-current);
+  opacity: var(--dt-order-arrow_opacity-current);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.dt-orderable-none:not(.dt-ordering-asc, .dt-ordering-desc) .dt-column-order:empty, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.sorting_desc_disabled .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th.sorting_asc_disabled .dt-column-order:before, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.dt-orderable-none:not(.dt-ordering-asc, .dt-ordering-desc) .dt-column-order:empty, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.sorting_desc_disabled .dt-column-order:after, #page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td.sorting_asc_disabled .dt-column-order:before {
+  display: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th:active,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td:active {
+  outline: none;
+}
+
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: var(--dt-header-cell_align-items);
+  gap: 4px;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-header .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-footer .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-header .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-footer .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-header .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-footer .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-header .dt-column-title,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-footer .dt-column-title {
+  flex-grow: 1;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-header .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > th div.dt-column-footer .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-header .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable thead > tr > td div.dt-column-footer .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-header .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > th div.dt-column-footer .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-header .dt-column-title:empty,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot > tr > td div.dt-column-footer .dt-column-title:empty {
+  display: none;
+}
+
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body > table.dataTable > thead > tr > th,
+#page-blocks-configurable_reports-viewreport div.dt-scroll-body > table.dataTable > thead > tr > td {
+  overflow: hidden;
+}
+
+#page-blocks-configurable_reports-viewreport :root.dark table.dataTable thead > tr > th.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport :root.dark table.dataTable thead > tr > th.dt-orderable-desc:hover, #page-blocks-configurable_reports-viewreport :root.dark table.dataTable thead > tr > td.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport :root.dark table.dataTable thead > tr > td.dt-orderable-desc:hover, #page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable thead > tr > th.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable thead > tr > th.dt-orderable-desc:hover, #page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable thead > tr > td.dt-orderable-asc:hover, #page-blocks-configurable_reports-viewreport :root[data-bs-theme=dark] table.dataTable thead > tr > td.dt-orderable-desc:hover {
+  outline: var(--dt-order-header_outline-hover);
+}
+
+#page-blocks-configurable_reports-viewreport {
+  --dt-processing-circle_background: var(--dt_background-selected);
+}
+
+#page-blocks-configurable_reports-viewreport div.dt-processing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  margin-left: -100px;
+  margin-top: -22px;
+  text-align: center;
+  padding: 2px;
+  z-index: 10;
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child {
+  position: relative;
+  width: 80px;
+  height: 15px;
+  margin: 1em auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child > div {
+  position: absolute;
+  top: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(var(--dt-processing-circle_background));
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child > div:nth-child(1) {
+  left: 8px;
+  animation: datatables-loader-1 0.6s infinite;
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child > div:nth-child(2) {
+  left: 8px;
+  animation: datatables-loader-2 0.6s infinite;
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child > div:nth-child(3) {
+  left: 32px;
+  animation: datatables-loader-2 0.6s infinite;
+}
+#page-blocks-configurable_reports-viewreport div.dt-processing > div:last-child > div:nth-child(4) {
+  left: 56px;
+  animation: datatables-loader-3 0.6s infinite;
+}
+
+@keyframes datatables-loader-1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes datatables-loader-3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes datatables-loader-2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.nowrap th, #page-blocks-configurable_reports-viewreport table.dataTable.nowrap td {
+  white-space: nowrap;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th,
+#page-blocks-configurable_reports-viewreport table.dataTable td {
+  box-sizing: border-box;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-numeric, #page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-date, #page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-numeric, #page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-date {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-numeric div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-numeric div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-date div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-type-date div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-numeric div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-numeric div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-date div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-type-date div.dt-column-footer {
+  flex-direction: row-reverse;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-left,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-left {
+  text-align: left;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-left div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-left div.dt-column-footer {
+  flex-direction: row;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-center,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-center {
+  text-align: center;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-right,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-right {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-right div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-right div.dt-column-footer {
+  flex-direction: row-reverse;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-justify,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-justify {
+  text-align: justify;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-justify div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-justify div.dt-column-footer {
+  flex-direction: row;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-nowrap,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-nowrap {
+  white-space: nowrap;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable th.dt-empty,
+#page-blocks-configurable_reports-viewreport table.dataTable td.dt-empty {
+  text-align: center;
+  vertical-align: top;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td {
+  text-align: left;
+  vertical-align: var(--dt-header-cell_vertical-align);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-left,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-left,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-left,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-left {
+  text-align: left;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-left div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-left div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-left div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-left div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-left div.dt-column-footer {
+  flex-direction: row;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-center,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-center,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-center,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-center {
+  text-align: center;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-right,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-right,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-right,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-right {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-right div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-right div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-right div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-right div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-right div.dt-column-footer {
+  flex-direction: row-reverse;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-justify,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-justify,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-justify,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-justify {
+  text-align: justify;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-justify div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-justify div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-justify div.dt-column-footer,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-justify div.dt-column-header,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-justify div.dt-column-footer {
+  flex-direction: row;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable thead th.dt-head-nowrap,
+#page-blocks-configurable_reports-viewreport table.dataTable thead td.dt-head-nowrap,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot th.dt-head-nowrap,
+#page-blocks-configurable_reports-viewreport table.dataTable tfoot td.dt-head-nowrap {
+  white-space: nowrap;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody th.dt-body-left,
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-body-left {
+  text-align: left;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody th.dt-body-center,
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-body-center {
+  text-align: center;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody th.dt-body-right,
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-body-right {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody th.dt-body-justify,
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-body-justify {
+  text-align: justify;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable tbody th.dt-body-nowrap,
+#page-blocks-configurable_reports-viewreport table.dataTable tbody td.dt-body-nowrap {
+  white-space: nowrap;
+}
+
+#page-blocks-configurable_reports-viewreport {
+  --dt-header_border: 1px solid rgba(0, 0, 0, 0.3);
+  --dt-header_padding: 10px;
+  --dt-footer_border: var(--dt-header_border);
+  --dt-footer_padding: 10px 10px 6px 10px;
+  --dt-body_border: 1px solid rgba(0, 0, 0, 0.15);
+  --dt-body_padding: 8px 10px;
+  --dt-column-ordering_alpha: 0.019;
+  --dt-column-ordering_alpha-selected: 0.919;
+  --dt-row_alpha-hover: 0.035;
+  --dt-row_alpha-selected-stripe: 0.923;
+  --dt-row_alpha-stripe: 0.023;
+  --dt-control_color: inherit;
+  --dt-paging-button_box-shadow: none;
+  --dt-paging-button_box-shadow-active: inset 0 0 3px #111;
+  --dt-paging-button_padding: 0.5em 1em;
+  --dt-paging-button_margin-left: 2px;
+  --dt-paging-button_border-radius: 3px;
+  --dt-paging-button_background: transparent;
+  --dt-paging-button_border: 1px solid transparent;
+  --dt-paging-button_color: var(--dt-control_color);
+  --dt-paging-button_background-disabled: transparent;
+  --dt-paging-button_border-disabled: 1px solid transparent;
+  --dt-paging-button_color-disabled: rgba(0, 0, 0, 0.5);
+  --dt-paging-button_background-current: rgba(0, 0, 0, 0.05);
+  --dt-paging-button_border-current: 1px solid rgba(0, 0, 0, 0.3);
+  --dt-paging-button_color-current: var(--dt-control_color);
+  --dt-paging-button_background-current-hover: rgba(0, 0, 0, 0.1);
+  --dt-paging-button_border-current-hover: 1px solid rgba(0, 0, 0, 0.5);
+  --dt-paging-button_color-current-hover: var(--dt-control_color);
+  --dt-paging-button_background-hover: rgba(0, 0, 0, 0.1);
+  --dt-paging-button_border-hover: 1px solid transparent;
+  --dt-paging-button_color-hover: var(--dt-control_color);
+  --dt-input_border: 1px solid #aaa;
+  --dt-input_border-radius: 3px;
+  --dt-input_padding: 7px 5px;
+  --dt-input_background: transparent;
+  --dt-input_color: inherit;
+}
+#page-blocks-configurable_reports-viewreport :root.dark {
+  --dt-row_background-stripe: 255, 255, 255;
+  --dt-row_background-hover: 255, 255, 255;
+  --dt-column-ordering_background: 255, 255, 255;
+  --dt-header_border: 1px solid rgb(89, 91, 94);
+  --dt-body_border: 1px solid rgb(64, 67, 70);
+  --dt-paging-button_color: var(--dt-control_color);
+  --dt-paging-button_background-current: rgba(255, 255, 255, 0.05);
+  --dt-paging-button_border-current: 1px solid rgba(255, 255, 255, 0.1);
+  --dt-paging-button_background-current-hover: rgba(0, 0, 0, 0.1);
+  --dt-paging-button_border-current-hover: 1px solid rgba(255, 255, 255, 0.3);
+  --dt-paging-button_color-disabled: rgba(255, 255, 255, 0.25);
+  --dt-paging-button_background-hover: rgba(0, 0, 0, 0.2);
+  --dt-paging-button_border-hover: 1px solid transparent;
+  --dt-input_border: 1px solid rgb(255, 255, 255, 0.2);
+  --dt-input_background: rgb(44, 48, 51);
+}
 
 /*
- * Table
+ * Table styles
  */
 #page-blocks-configurable_reports-viewreport table.dataTable {
-    margin: 0 auto;
-    clear: both;
-    width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  border-spacing: 0;
+  /*
+   * Header and footer styles
+   */
 }
-
-#page-blocks-configurable_reports-viewreport table.dataTable thead th {
-    padding: 3px 18px 3px 10px;
-    border-bottom: 1px solid black;
-    font-weight: bold;
-    cursor: pointer;
-    *cursor: hand;
-}
-
+#page-blocks-configurable_reports-viewreport table.dataTable thead th,
 #page-blocks-configurable_reports-viewreport table.dataTable tfoot th {
-    padding: 3px 18px 3px 10px;
-    border-top: 1px solid black;
-    font-weight: bold;
+  font-weight: bold;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > th,
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > td {
+  padding: var(--dt-header_padding);
+  border-bottom: var(--dt-header_border);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > th:active,
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > td:active {
+  outline: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tfoot > tr > th,
+#page-blocks-configurable_reports-viewreport table.dataTable > tfoot > tr > td {
+  border-top: var(--dt-footer_border);
+  padding: var(--dt-footer_padding);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable {
+  /*
+   * Body styles
+   */
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr {
+  background-color: var(--dt-row_background);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr:first-child > * {
+  border-top: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr:last-child > * {
+  border-bottom: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr.selected > * {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), 0.9);
+  color: rgb(var(--dt-row-text_color-selected));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr.selected a {
+  color: rgb(var(--dt-row-link_color-selected));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > th,
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > td {
+  padding: var(--dt-body_padding);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.row-border > tbody > tr > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr > * {
+  border-top: var(--dt-body_border);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.row-border > tbody > tr:first-child > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:first-child > * {
+  border-top: none;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.row-border > tbody > tr.selected + tr.selected > td, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr.selected + tr.selected > td {
+  border-top-color: rgba(var(--dt-row_background-selected), 0.65);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.cell-border > tbody > tr > * {
+  border-top: var(--dt-body_border);
+  border-right: var(--dt-body_border);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.cell-border > tbody > tr > *:first-child {
+  border-left: var(--dt-body_border);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.cell-border > tbody > tr:first-child > * {
+  border-top: var(--dt-header_border);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.stripe > tbody > tr:nth-child(odd) > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd) > * {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-stripe), var(--dt-row_alpha-stripe));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.stripe > tbody > tr:nth-child(odd).selected > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd).selected > * {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), var(--dt-row_alpha-selected-stripe));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.hover > tbody > tr:hover > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:hover > * {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-hover), var(--dt-row_alpha-hover));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.hover > tbody > tr.selected:hover > *, #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr.selected:hover > * {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), 1) !important;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr > .sorting_1,
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr > .sorting_2,
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr > .sorting_3,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr > .sorting_1,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr > .sorting_2,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-column-ordering_background), var(--dt-column-ordering_alpha));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr.selected > .sorting_1,
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr.selected > .sorting_2,
+#page-blocks-configurable_reports-viewreport table.dataTable.order-column > tbody tr.selected > .sorting_3,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr.selected > .sorting_1,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr.selected > .sorting_2,
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody tr.selected > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), var(--dt-column-ordering_alpha-selected));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd) > .sorting_1, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd) > .sorting_1 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-column-ordering_background), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha)));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd) > .sorting_2, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd) > .sorting_2 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-column-ordering_background), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha) - 0.007));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd) > .sorting_3, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd) > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-column-ordering_background), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha) - 0.015));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd).selected > .sorting_1, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd).selected > .sorting_1 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha)));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd).selected > .sorting_2, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd).selected > .sorting_2 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha) - 0.007));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr:nth-child(odd).selected > .sorting_3, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.stripe > tbody > tr:nth-child(odd).selected > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha) - 0.015));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover > .sorting_1, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover > .sorting_1 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-hover), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha) + var(--dt-row_alpha-hover)));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover > .sorting_2, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover > .sorting_2 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-hover), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha) + var(--dt-row_alpha-hover) - 0.007));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover > .sorting_3, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-hover), calc(var(--dt-row_alpha-stripe) + var(--dt-column-ordering_alpha) + var(--dt-row_alpha-hover) - 0.015));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover.selected > .sorting_1, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_1 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha)));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover.selected > .sorting_2, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_2 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha) + var(--dt-row_alpha-hover) - 0.007));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.display tbody tr:hover.selected > .sorting_3, #page-blocks-configurable_reports-viewreport table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_3 {
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row_background-selected), calc(var(--dt-row_alpha-selected-stripe) + var(--dt-column-ordering_alpha) + var(--dt-row_alpha-hover) - 0.015));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.compact thead th,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact thead td,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact tfoot th,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact tfoot td,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact tbody th,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact tbody td {
+  padding: 4px;
 }
 
-#page-blocks-configurable_reports-viewreport table.dataTable td {
-    padding: 3px 10px;
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0.75em 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row div.dt-layout-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+  justify-content: flex-start;
+  margin-right: auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+  justify-content: flex-end;
+  margin-left: auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row div.dt-layout-cell:empty {
+  display: none;
 }
 
-#page-blocks-configurable_reports-viewreport table.dataTable td.center,
-#page-blocks-configurable_reports-viewreport table.dataTable td.dataTables_empty {
+@media screen and (max-width: 767px) {
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: block;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row:not(.dt-layout-table) div.dt-layout-cell {
+    display: block;
     text-align: center;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row:not(.dt-layout-table) div.dt-layout-cell > * {
+    margin: 0.5em 0;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row:not(.dt-layout-table) div.dt-layout-cell.dt-layout-start {
+    margin-right: 0;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-row:not(.dt-layout-table) div.dt-layout-cell.dt-layout-end {
+    margin-left: 0;
+  }
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-start > *:not(:last-child) {
+  margin-right: 1em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-end > *:not(:first-child) {
+  margin-left: 1em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-full {
+  width: 100%;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-full > *:only-child {
+  margin-left: auto;
+  margin-right: auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-table > div {
+  display: block !important;
 }
 
-#page-blocks-configurable_reports-viewreport table.dataTable tr.odd {
-    background-color: #E2E4FF;
+@media screen and (max-width: 767px) {
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-start > *:not(:last-child) {
+    margin-right: 0;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-container div.dt-layout-end > *:not(:first-child) {
+    margin-left: 0;
+  }
+}
+/*
+ * Control feature layout
+ */
+#page-blocks-configurable_reports-viewreport div.dt-container {
+  position: relative;
+  clear: both;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-search input {
+  border: var(--dt-input_border);
+  border-radius: var(--dt-input_border-radius);
+  padding: var(--dt-input_padding);
+  background-color: var(--dt-input_background);
+  color: var(--dt-input_color);
+  margin-left: 3px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-input {
+  border: var(--dt-input_border);
+  border-radius: var(--dt-input_border-radius);
+  padding: var(--dt-input_padding);
+  background-color: var(--dt-input_background);
+  color: var(--dt-input_color);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: var(--dt-paging-button_padding);
+  margin-left: var(--dt-paging-button_margin-left);
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  color: var(--dt-paging-button_color);
+  border: var(--dt-paging-button_border);
+  border-radius: var(--dt-paging-button_border-radius);
+  background: var(--dt-paging-button_background);
+  box-shadow: var(--dt-paging-button_box-shadow);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button.current {
+  color: var(--dt-paging-button_color-current) !important;
+  border: var(--dt-paging-button_border-current);
+  background: var(--dt-paging-button_background-current);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button.current:hover {
+  color: var(--dt-paging-button_color-current-hover) !important;
+  border: var(--dt-paging-button_border-current-hover);
+  background: var(--dt-paging-button_background-current-hover);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button.disabled, #page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button.disabled:hover, #page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button.disabled:active {
+  cursor: default;
+  color: var(--dt-paging-button_color-disabled) !important;
+  border: var(--dt-paging-button_border-disabled);
+  background: var(--dt-paging-button_background-disabled);
+  box-shadow: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button:hover {
+  color: var(--dt-paging-button_color-hover) !important;
+  border: var(--dt-paging-button_border-hover);
+  background: var(--dt-paging-button_background-hover);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .dt-paging-button:active {
+  outline: none;
+  background: var(--dt-paging-button_background-hover);
+  box-shadow: var(--dt-paging-button_box-shadow-active);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging .ellipsis {
+  padding: 0 1em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-length,
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-search,
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-info,
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-processing,
+#page-blocks-configurable_reports-viewreport div.dt-container .dt-paging {
+  color: var(--dt-control_color);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container.dt-empty-footer tbody > tr:last-child > * {
+  border-bottom: var(--dt-header_border);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container.dt-empty-footer .dt-scroll-body {
+  border-bottom: var(--dt-header_border);
+}
+#page-blocks-configurable_reports-viewreport div.dt-container.dt-empty-footer .dt-scroll-body tbody > tr:last-child > * {
+  border-bottom: none;
 }
 
-#page-blocks-configurable_reports-viewreport table.dataTable tr.even {
-    background-color: white;
+html.dark #page-blocks-configurable_reports-viewreport table.dataTable.row-border > tbody > tr.selected + tr.selected > td, html.dark #page-blocks-configurable_reports-viewreport table.dataTable.display > tbody > tr.selected + tr.selected > td {
+  border-top-color: rgba(var(--dt-row_background-selected), 0.65);
 }
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.odd td.sorting_1 {
-    background-color: #D3D6FF;
-}
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.odd td.sorting_2 {
-    background-color: #DADCFF;
-}
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.odd td.sorting_3 {
-    background-color: #E0E2FF;
-}
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.even td.sorting_1 {
-    background-color: #EAEBFF;
-}
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.even td.sorting_2 {
-    background-color: #F2F3FF;
-}
-
-#page-blocks-configurable_reports-viewreport table.dataTable tr.even td.sorting_3 {
-    background-color: #F9F9FF;
-}
-
 
 /*
- * Table wrapper
+ * Overrides for RTL support
  */
-#page-blocks-configurable_reports-viewreport .dataTables_wrapper {
-    position: relative;
-    clear: both;
-    *zoom: 1;
+#page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable thead th,
+#page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable thead td,
+#page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable tfoot th,
+#page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable tfoot td {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable th.dt-type-numeric, #page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable th.dt-type-date, #page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable td.dt-type-numeric, #page-blocks-configurable_reports-viewreport *[dir=rtl] table.dataTable td.dt-type-date {
+  text-align: left;
+}
+#page-blocks-configurable_reports-viewreport *[dir=rtl] div.dt-container div.dt-layout-cell.dt-start {
+  text-align: right;
+}
+#page-blocks-configurable_reports-viewreport *[dir=rtl] div.dt-container div.dt-layout-cell.dt-end {
+  text-align: left;
+}
+#page-blocks-configurable_reports-viewreport *[dir=rtl] div.dt-container div.dt-search input {
+  margin: 0 3px 0 0;
 }
 
-
-/*
- * Page length menu
- */
-#page-blocks-configurable_reports-viewreport .dataTables_length {
-    float: left;
+/* DataTables Buttons styles */
+@keyframes dtb-spinner {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes dtb-spinner {
+  100% {
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes dtb-spinner {
+  100% {
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dtb-spinner {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes dtb-spinner {
+  100% {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+#page-blocks-configurable_reports-viewreport {
+  --dtb-processing_border: 2px solid rgb(40, 40, 40);
+  --dtb-processing_filter: drop-shadow(0px 0px 3px white);
 }
 
-
-/*
- * Filter
- */
-#page-blocks-configurable_reports-viewreport .dataTables_filter {
-    float: right;
-    text-align: right;
+#page-blocks-configurable_reports-viewreport div.dt-buttons {
+  position: initial;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons .dt-button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-
-/*
- * Table information
- */
-#page-blocks-configurable_reports-viewreport .dataTables_info {
-    clear: both;
-    float: left;
+#page-blocks-configurable_reports-viewreport div.dt-button-info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  margin-top: -100px;
+  margin-left: -200px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: center;
+  z-index: 2003;
+  overflow: hidden;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-info h2 {
+  padding: 2rem 2rem 1rem 2rem;
+  margin: 0;
+  font-weight: normal;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-info > div {
+  padding: 1em 2em 2em 2em;
 }
 
-
-/*
- * Pagination
- */
-#page-blocks-configurable_reports-viewreport .dataTables_paginate {
-    float: right;
-    text-align: right;
+#page-blocks-configurable_reports-viewreport div.dtb-popover-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  border-radius: 3px;
+  cursor: pointer;
+  z-index: 2003;
 }
 
-/* Two button pagination - previous / next */
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous,
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next {
-    height: 19px;
-    float: left;
-    cursor: pointer;
-    *cursor: hand;
-    color: #111 !important;
+#page-blocks-configurable_reports-viewreport button.dtb-hide-drop {
+  display: none !important;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous:hover,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous:hover,
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next:hover,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next:hover {
-    text-decoration: none !important;
+#page-blocks-configurable_reports-viewreport div.dt-button-collection-title {
+  text-align: center;
+  padding: 0.3em 0.5em 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous:active,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous:active,
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next:active,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next:active {
-    outline: none;
+#page-blocks-configurable_reports-viewreport div.dt-button-collection-title:empty {
+  display: none;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous,
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next {
-    color: #666 !important;
+#page-blocks-configurable_reports-viewreport span.dt-button-spacer {
+  display: inline-block;
+  margin: 0.5em;
+  white-space: nowrap;
+}
+#page-blocks-configurable_reports-viewreport span.dt-button-spacer.bar {
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  vertical-align: middle;
+  padding-left: 0.5em;
+}
+#page-blocks-configurable_reports-viewreport span.dt-button-spacer.bar:empty {
+  height: 1em;
+  width: 1px;
+  padding-left: 0;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous {
-    padding-left: 23px;
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active {
+  padding-right: 3em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  right: 1em;
+  display: inline-block;
+  content: "\2713";
+  color: inherit;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active.dt-button-split {
+  padding-right: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active.dt-button-split:after {
+  display: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active.dt-button-split > *:first-child {
+  padding-right: 3em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active.dt-button-split > *:first-child:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  right: 1em;
+  display: inline-block;
+  content: "\2713";
+  color: inherit;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active-a a {
+  padding-right: 3em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button-active-a a:after {
+  position: absolute;
+  right: 1em;
+  display: inline-block;
+  content: "\2713";
+  color: inherit;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection span.dt-button-spacer {
+  width: 100%;
+  font-size: 0.9em;
+  text-align: center;
+  margin: 0.5em 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection span.dt-button-spacer:empty {
+  height: 0;
+  width: 100%;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection span.dt-button-spacer.bar {
+  border-left: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 0;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next,
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next {
-    padding-right: 23px;
-    margin-left: 10px;
+@media print {
+  #page-blocks-configurable_reports-viewreport table.dataTable tr > * {
+    box-shadow: none !important;
+  }
+}
+#page-blocks-configurable_reports-viewreport {
+  --dtb-button_background: rgba(0, 0, 0, 0.05);
+  --dtb-button_border: 1px solid rgba(0, 0, 0, 0.3);
+  --dtb-button_border-radius: 3px;
+  --dtb-button_box-shadow: none;
+  --dtb-button_color: inherit;
+  --dtb-button_background-hover: rgba(0, 0, 0, 0.1);
+  --dtb-button_border-hover: 1px solid rgba(0, 0, 0, 0.5);
+  --dtb-button_border-radius-hover: var(--dtb-button_border-radius);
+  --dtb-button_box-shadow-hover: none;
+  --dtb-button_color-hover: var(--dtb-button_border-radius);
+  --dtb-button_background-active: rgba(178.5, 178.5, 178.5, 0.1);
+  --dtb-button_border-active: var(--dtb-button_border);
+  --dtb-button_border-radius-active: var(--dtb-button_border-radius);
+  --dtb-button_box-shadow-active: inset 1px 1px 3px #999999;
+  --dtb-button_color-active: var(--dtb-button_border-radius);
+  --dtb-button_background-active-hover: rgba(127.5, 127.5, 127.5, 0.1);
+  --dtb-button_border-active-hover: var(--dtb-button_border);
+  --dtb-button_border-radius-active-hover: var(--dtb-button_border-radius);
+  --dtb-button_box-shadow-active-hover: inset 1px 1px 3px #999999;
+  --dtb-button_color-active-hover: var(--dtb-button_border-radius);
+  --dtb-collection_border: 1px solid rgba( 0, 0, 0, 0.4 );
+  --dtb-collection_background-color: white;
+  --dtb-collection_box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.3);
+}
+#page-blocks-configurable_reports-viewreport :root.dark {
+  --dtb-button_background: rgba(255, 255, 255, 0.05);
+  --dtb-button_border: 1px solid rgb(255, 255, 255, 0.2);
+  --dtb-button_background-hover: rgba(0, 0, 0, 0.1);
+  --dtb-button_border-hover: 1px solid rgba(255, 255, 255, 0.3);
+  --dtb-button_background-active: rgba(255, 255, 255, 0.1);
+  --dtb-button_border-active: var(--dtb-button_border);
+  --dtb-button_box-shadow-active: inset 0 0 3px #111;
+  --dtb-button_background-active-hover: rgba(255, 255, 255, 0.2);
+  --dtb-button_border-active-hover: var(--dtb-button_border);
+  --dtb-button_box-shadow-active-hover: inset 0 0 3px #111;
+  --dtb-collection_border: 1px solid rgba(255, 255, 255, 0.15);
+  --dtb-collection_background-color: rgb(33, 37, 41);
+  --dtb-collection_box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.8);
+  --dtb-processing_border: 2px solid rgb(224, 224, 224);
+  --dtb-processing_filter: drop-shadow(0px 0px 3px black);
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous {
-    background: url([[pix:block_configurable_reports|datatable/back_enabled]]) no-repeat top left;
+#page-blocks-configurable_reports-viewreport div.dt-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  justify-content: center;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button,
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-left: 0.167em;
+  margin-right: 0.167em;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-size: 0.88em;
+  line-height: 1.6em;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  border: var(--dtb-button_border);
+  border-radius: var(--dtb-button_border-radius);
+  box-shadow: var(--dtb-button_box-shadow);
+  background: var(--dtb-button_background);
+  color: var(--dtb-button_color);
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button:first-child,
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:first-child {
+  margin-left: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button.disabled,
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button.disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button.dt-button-active:not(.disabled),
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button.dt-button-active:not(.disabled) {
+  border: var(--dtb-button_border-active);
+  border-radius: var(--dtb-button_border-radius-active);
+  box-shadow: var(--dtb-button_box-shadow-active);
+  background: var(--dtb-button_background-active);
+  color: var(--dtb-button_color-active);
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button.dt-button-active:not(.disabled):hover:not(.disabled),
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button.dt-button-active:not(.disabled):hover:not(.disabled) {
+  border: var(--dtb-button_border-active-hover);
+  border-radius: var(--dtb-button_border-radius-active-hover);
+  box-shadow: var(--dtb-button_box-shadow-active-hover);
+  background: var(--dtb-button_background-active-hover);
+  color: var(--dtb-button_color-active-hover);
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button:hover,
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:hover {
+  text-decoration: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button:hover:not(.disabled),
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:hover:not(.disabled) {
+  border: var(--dtb-button_border-hover);
+  border-radius: var(--dtb-button_border-radius-hover);
+  box-shadow: var(--dtb-button_box-shadow-hover);
+  background: var(--dtb-button_background-hover);
+  color: var(--dtb-button_color-hover);
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > .dt-button embed,
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button embed {
+  outline: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:first-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:first-child:hover {
+  border-right: 1px solid #666;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:last-child {
+  border-left: 1px solid transparent;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:last-child:hover {
+  border-left: 1px solid #666;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons span.dt-button-down-arrow {
+  position: relative;
+  top: -2px;
+  font-size: 10px;
+  padding-left: 10px;
+  line-height: 1em;
+  opacity: 0.6;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons div.dt-button-split {
+  display: inline-block;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons div.dt-button-split .dt-button:first-child {
+  margin-right: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons div.dt-button-split .dt-button:last-child {
+  margin-left: -1px;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  z-index: 2;
+}
+#page-blocks-configurable_reports-viewreport div.dt-buttons div.dt-button-split .dt-button:last-child span {
+  padding-left: 0;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_enabled_previous:hover {
-    background: url([[pix:block_configurable_reports|datatable/back_enabled_hover]]) no-repeat top left;
+#page-blocks-configurable_reports-viewreport div.dt-button-collection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 0.75em 0;
+  border: var(--dtb-collection_border);
+  background-color: var(--dtb-collection_background-color);
+  overflow: hidden;
+  z-index: 2002;
+  border-radius: 5px;
+  box-shadow: var(--dtb-collection_box-shadow);
+  box-sizing: border-box;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button {
+  position: relative;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  float: none;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  margin: 0;
+  padding: 0.5em 1em;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button.dt-button-active {
+  background: none;
+  box-shadow: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button.disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button:hover:not(.disabled) {
+  border: none;
+  background: rgba(153, 153, 153, 0.1);
+  box-shadow: none;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button:focus {
+  outline-offset: -2px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection div.dt-button-split {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: stretch;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection div.dt-button-split button.dt-button {
+  margin: 0;
+  display: inline-block;
+  width: 0;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 50px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection div.dt-button-split button.dt-button-split-drop {
+  min-width: 33px;
+  flex: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed {
+  position: fixed;
+  display: block;
+  top: 50%;
+  left: 50%;
+  margin-left: -75px;
+  border-radius: 5px;
+  background-color: white;
+  padding: 0.5em;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.two-column {
+  margin-left: -200px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.three-column {
+  margin-left: -225px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.four-column {
+  margin-left: -300px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.columns {
+  margin-left: -409px;
+}
+@media screen and (max-width: 1024px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.columns {
+    margin-left: -308px;
+  }
+}
+@media screen and (max-width: 640px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.columns {
+    margin-left: -203px;
+  }
+}
+@media screen and (max-width: 460px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed.columns {
+    margin-left: -100px;
+  }
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed > :last-child {
+  max-height: 100vh;
+  overflow: auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.two-column > :last-child, #page-blocks-configurable_reports-viewreport div.dt-button-collection.three-column > :last-child, #page-blocks-configurable_reports-viewreport div.dt-button-collection.four-column > :last-child {
+  display: block !important;
+  column-gap: 8px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.two-column > :last-child > *, #page-blocks-configurable_reports-viewreport div.dt-button-collection.three-column > :last-child > *, #page-blocks-configurable_reports-viewreport div.dt-button-collection.four-column > :last-child > * {
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.two-column {
+  width: 400px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.two-column > :last-child {
+  padding-bottom: 1px;
+  column-count: 2;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.three-column {
+  width: 450px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.three-column > :last-child {
+  padding-bottom: 1px;
+  column-count: 3;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.four-column {
+  width: 600px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.four-column > :last-child {
+  padding-bottom: 1px;
+  column-count: 4;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection .dt-button {
+  border-radius: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns {
+  width: auto;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns > :last-child {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  width: 818px;
+  padding-bottom: 1px;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns > :last-child .dt-button {
+  min-width: 200px;
+  flex: 0 1;
+  margin: 0;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b3 > :last-child, #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b2 > :last-child, #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b1 > :last-child {
+  justify-content: space-between;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b3 .dt-button {
+  flex: 1 1 32%;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b2 .dt-button {
+  flex: 1 1 48%;
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b1 .dt-button {
+  flex: 1 1 100%;
+}
+@media screen and (max-width: 1024px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns > :last-child {
+    width: 612px;
+  }
+}
+@media screen and (max-width: 640px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns > :last-child {
+    width: 406px;
+  }
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns.dtb-b3 .dt-button {
+    flex: 0 1 32%;
+  }
+}
+@media screen and (max-width: 460px) {
+  #page-blocks-configurable_reports-viewreport div.dt-button-collection.columns > :last-child {
+    width: 200px;
+  }
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed {
+  background-color: var(--dtb-collection_background-color);
+}
+#page-blocks-configurable_reports-viewreport div.dt-button-collection.fixed .dt-button {
+  border-radius: 0.25em;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_disabled_previous {
-    background: url([[pix:block_configurable_reports|datatable/back_disabled]]) no-repeat top left;
+#page-blocks-configurable_reports-viewreport div.dt-button-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Fallback */
+  background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%); /* W3C Markup, IE10 Release Preview */
+  z-index: 2001;
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next {
-    background: url([[pix:block_configurable_reports|datatable/forward_enabled]]) no-repeat top right;
+#page-blocks-configurable_reports-viewreport .dt-button.processing {
+  color: rgba(0, 0, 0, 0.2);
+}
+#page-blocks-configurable_reports-viewreport .dt-button.processing:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  box-sizing: border-box;
+  display: block;
+  content: " ";
+  border: var(--dtb-processing_border);
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: dtb-spinner 1500ms infinite linear;
+  -o-animation: dtb-spinner 1500ms infinite linear;
+  -ms-animation: dtb-spinner 1500ms infinite linear;
+  -webkit-animation: dtb-spinner 1500ms infinite linear;
+  -moz-animation: dtb-spinner 1500ms infinite linear;
+  filter: var(--dtb-processing_filter);
 }
 
-#page-blocks-configurable_reports-viewreport .paginate_enabled_next:hover {
-    background: url([[pix:block_configurable_reports|datatable/forward_enabled_hover]]) no-repeat top right;
-}
-
-#page-blocks-configurable_reports-viewreport .paginate_disabled_next {
-    background: url([[pix:block_configurable_reports|datatable/forward_disabled]]) no-repeat top right;
-}
-
-/* Full number pagination */
-#page-blocks-configurable_reports-viewreport .paging_full_numbers {
-    height: 22px;
-    line-height: 22px;
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a:active {
-    outline: none
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a:hover {
-    text-decoration: none;
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a.paginate_button,
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a.paginate_active {
-    border: 1px solid #aaa;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    padding: 2px 5px;
-    margin: 0 3px;
-    cursor: pointer;
-    *cursor: hand;
-    color: #333 !important;
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a.paginate_button {
-    background-color: #ddd;
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a.paginate_button:hover {
-    background-color: #ccc;
-    text-decoration: none !important;
-}
-
-#page-blocks-configurable_reports-viewreport .paging_full_numbers a.paginate_active {
-    background-color: #99B3FF;
-}
-
-
-/*
- * Processing indicator
- */
-#page-blocks-configurable_reports-viewreport .dataTables_processing {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 250px;
-    height: 30px;
-    margin-left: -125px;
-    margin-top: -15px;
-    padding: 14px 0 2px 0;
-    border: 1px solid #ddd;
+@media screen and (max-width: 640px) {
+  #page-blocks-configurable_reports-viewreport div.dt-buttons {
+    float: none !important;
     text-align: center;
-    color: #999;
-    font-size: 14px;
-    background-color: white;
+  }
+}
+html.dark #page-blocks-configurable_reports-viewreport div.dt-buttons > div.dt-button-split .dt-button:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+html.dark #page-blocks-configurable_reports-viewreport div.dt-button-info {
+  background-color: var(--dt-html_background);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-
-/*
- * Sorting
- */
-#page-blocks-configurable_reports-viewreport .sorting {
-    background: url([[pix:block_configurable_reports|datatable/sort_both]]) no-repeat center right;
+/* DataTables RowGroup styles */
+#page-blocks-configurable_reports-viewreport {
+  --dtrg-group-level-0_background: rgba(0, 0, 0, 0.1);
+  --dtrg-group-level-0_font-size: 1em;
+  --dtrg-group-level-1_background: rgba(0, 0, 0, 0.05);
+  --dtrg-group-level-1_font-size: 0.9em;
+  --dtrg-group-level-1_padding: 0.25em 0.25em 0.25em 2em;
+  --dtrg-group-level-2_background: rgba(0, 0, 0, 0.05);
+  --dtrg-group-level-2_font-size: 0.9em;
+  --dtrg-group-level-2_padding: 0.25em 0.25em 0.25em 2.5em;
+  --dtrg-group-level-3_background: rgba(0, 0, 0, 0.05);
+  --dtrg-group-level-3_font-size: 0.9em;
+  --dtrg-group-level-3_padding: 0.25em 0.25em 0.25em 3em;
+  --dtrg-group-level-4_background: rgba(0, 0, 0, 0.05);
+  --dtrg-group-level-4_font-size: 0.9em;
+  --dtrg-group-level-4_padding: 0.25em 0.25em 0.25em 3.5em;
+  --dtrg-group-level-5_background: rgba(0, 0, 0, 0.05);
+  --dtrg-group-level-5_font-size: 0.9em;
+  --dtrg-group-level-5_padding: 0.25em 0.25em 0.25em 4em;
 }
 
-#page-blocks-configurable_reports-viewreport .sorting_asc {
-    background: url([[pix:block_configurable_reports|datatable/sort_asc]]) no-repeat center right;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group th {
+  text-align: left;
 }
 
-#page-blocks-configurable_reports-viewreport .sorting_desc {
-    background: url([[pix:block_configurable_reports|datatable/sort_desc]]) no-repeat center right;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-0 th {
+  background-color: var(--dtrg-group-level-0_background);
+  font-weight: bold;
 }
 
-#page-blocks-configurable_reports-viewreport .sorting_asc_disabled {
-    background: url([[pix:block_configurable_reports|datatable/sort_asc_disabled]]) no-repeat center right;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-1 th {
+  background-color: var(--dtrg-group-level-1_background);
+  font-size: var(--dtrg-group-level-1_font-size);
+  padding: var(--dtrg-group-level-1_padding);
 }
 
-#page-blocks-configurable_reports-viewreport .sorting_desc_disabled {
-    background: url([[pix:block_configurable_reports|datatable/sort_desc_disabled]]) no-repeat center right;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-2 th {
+  background-color: var(--dtrg-group-level-1_background);
+  font-size: var(--dtrg-group-level-1_font-size);
+  padding: var(--dtrg-group-level-1_padding);
 }
 
-#page-blocks-configurable_reports-viewreport table.dataTable thead th:active,
-#page-blocks-configurable_reports-viewreport table.dataTable thead td:active {
-    outline: none;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-3 th {
+  background-color: var(--dtrg-group-level-1_background);
+  font-size: var(--dtrg-group-level-1_font-size);
+  padding: var(--dtrg-group-level-1_padding);
 }
 
-
-/*
- * Scrolling
- */
-#page-blocks-configurable_reports-viewreport .dataTables_scroll {
-    clear: both;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-4 th {
+  background-color: var(--dtrg-group-level-1_background);
+  font-size: var(--dtrg-group-level-1_font-size);
+  padding: var(--dtrg-group-level-1_padding);
 }
 
-#page-blocks-configurable_reports-viewreport .dataTables_scrollBody {
-    *margin-top: -1px;
-    -webkit-overflow-scrolling: touch;
+#page-blocks-configurable_reports-viewreport table.dataTable tr.dtrg-group.dtrg-level-5 th {
+  background-color: var(--dtrg-group-level-1_background);
+  font-size: var(--dtrg-group-level-1_font-size);
+  padding: var(--dtrg-group-level-1_padding);
+}
+
+#page-blocks-configurable_reports-viewreport :root.dark {
+  --dtrg-group-level-0_background: rgba(255, 255, 255, 0.1);
+  --dtrg-group-level-1_background: rgba(255, 255, 255, 0.05);
+  --dtrg-group-level-2_background: rgba(255, 255, 255, 0.05);
+  --dtrg-group-level-3_background: rgba(255, 255, 255, 0.05);
+  --dtrg-group-level-4_background: rgba(255, 255, 255, 0.05);
+  --dtrg-group-level-5_background: rgba(255, 255, 255, 0.05);
+}
+
+/* DataTables Select styles */
+#page-blocks-configurable_reports-viewreport {
+  --dtsl-tick_margin-top: -8px;
+  --dtsl-tick_line-height: 6px;
+  --dtsl-tick_border: 1px solid;
+  --dtsl-tick_border-checked: 1px solid;
+  --dtsl-tick_content-checked: '\2713';
+}
+
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > .selected {
+  background-color: rgb(var(--dt_background-selected));
+  color: rgb(var(--dt_color-selected));
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > .selected a {
+  color: rgb(var(--dt_link_color-selected));
+}
+
+#page-blocks-configurable_reports-viewreport div.dt-container span.select-info,
+#page-blocks-configurable_reports-viewreport div.dt-container span.select-item {
+  margin-left: 0.5em;
+}
+
+@media screen and (max-width: 640px) {
+  #page-blocks-configurable_reports-viewreport div.dt-container span.select-info,
+  #page-blocks-configurable_reports-viewreport div.dt-container span.select-item {
+    margin-left: 0;
+    display: block;
+  }
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > .dt-select {
+  text-align: center;
+  vertical-align: middle;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > .dt-select {
+  text-align: center;
+  vertical-align: middle;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > thead > tr > .dt-select input.dt-select-checkbox {
+  margin-left: auto;
+  margin-right: auto;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable input.dt-select-checkbox {
+  appearance: none;
+  position: relative;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: var(--dtsl-tick_border);
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-top: 1px;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1em;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable input.dt-select-checkbox:checked:after {
+  display: block;
+  content: var(--dtsl-tick_content-checked);
+  margin-top: var(--dtsl-tick_margin-top);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable input.dt-select-checkbox:indeterminate:after {
+  display: block;
+  position: absolute;
+  content: " ";
+  top: 3px;
+  left: 3px;
+  height: 4px;
+  width: 4px;
+  background-color: black;
+  border-radius: 2px;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr.selected input.dt-select-checkbox:checked {
+  border: var(--dtsl-tick_border-checked);
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > td.select-checkbox,
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > th.select-checkbox {
+  position: relative;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > td.select-checkbox:before,
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr > th.select-checkbox:before {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  content: " ";
+  margin-top: -6px;
+  margin-left: -6px;
+  border: var(--dtsl-tick_border);
+  border-radius: 3px;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr.selected > td.select-checkbox:before,
+#page-blocks-configurable_reports-viewreport table.dataTable > tbody > tr.selected > th.select-checkbox:before {
+  border: var(--dtsl-tick_border-checked);
+  content: "✓";
+  font-size: 20px;
+  line-height: var(--dtsl-tick_line-height);
+  text-align: center;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.compact > tbody > tr > td.select-checkbox:before,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact > tbody > tr > th.select-checkbox:before {
+  margin-top: -12px;
+}
+#page-blocks-configurable_reports-viewreport table.dataTable.compact > tbody > tr.selected > td.select-checkbox:after,
+#page-blocks-configurable_reports-viewreport table.dataTable.compact > tbody > tr.selected > th.select-checkbox:after {
+  margin-top: -16px;
+}
+
+html.dark #page-blocks-configurable_reports-viewreport table.dataTable input.dt-select-checkbox:indeterminate:after,
+#page-blocks-configurable_reports-viewreport html[data-bs-theme=dark] table.dataTable input.dt-select-checkbox:indeterminate:after {
+  background-color: white;
 }
 
 
@@ -891,4 +2207,21 @@ span.CodeMirror-selectedtext {
 
 #page-blocks-configurable_reports-editreport .CodeMirror {
     width: 100%;
+}
+/* Likeminded: the SQL and DataTables editors use the full width of the form, with the label above. */
+#fitem_id_querysql > .fitemtitle,
+#fitem_id_querysql > .felement,
+#fitem_id_datatablesconfig > .fitemtitle,
+#fitem_id_datatablesconfig > .felement {
+    float: none;
+    width: 100%;
+    max-width: none;
+    flex: 0 0 100%;
+}
+
+#fitem_id_querysql textarea,
+#fitem_id_querysql .cm-editor,
+#fitem_id_datatablesconfig textarea {
+    width: 100%;
+    max-width: none;
 }

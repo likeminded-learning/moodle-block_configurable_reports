@@ -1,0 +1,11 @@
+{
+  "name": "Course completion by user",
+  "summary": "<p>Completion status of each user in each course with completion tracking, grouped by user and course category.</p>",
+  "type": "sql",
+  "global": 1,
+  "jsordering": 1,
+  "export": ["csv", "xls", "ods"],
+  "filters": [
+    {"pluginname": "courses", "formdata": {}}
+  ]
+}
