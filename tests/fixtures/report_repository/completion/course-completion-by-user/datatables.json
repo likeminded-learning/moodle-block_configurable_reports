@@ -1,0 +1,6 @@
+{
+  "order": [[0, "asc"], [1, "asc"], [2, "asc"]],
+  "rowGroup": {"dataSrc": [0, 1]},
+  "columnDefs": [{"targets": [0, 1], "visible": false}],
+  "lengthMenu": [[-1, 100, 250, 500], ["All", 100, 250, 500]]
+}

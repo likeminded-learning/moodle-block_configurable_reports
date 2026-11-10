@@ -133,7 +133,7 @@ class plugin_subcategories extends filter_base {
                 }
             }
         } else {
-            $subcategorieslist = core_course_category::make_categories_list();
+            $subcategorieslist = cr_get_categories_list();
 
             if (!empty($subcategorieslist)) {
                 $courseoptions += $subcategorieslist;

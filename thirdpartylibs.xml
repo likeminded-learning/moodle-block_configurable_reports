@@ -15,9 +15,51 @@
         <licenseversion></licenseversion>
     </library>
     <library>
+        <location>amd/src/sqleditor-lazy.js</location>
+        <name>CodeMirror 6 with @codemirror/lang-sql (bundled from cm6/package.json)</name>
+        <version>6.43.15 (view), 6.10.0 (lang-sql)</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
         <location>amd/src/jquery.dataTables.js</location>
         <name>DataTables</name>
-        <version>1.13.7</version>
+        <version>3.1.5</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/dataTables.buttons.js</location>
+        <name>DataTables Buttons</name>
+        <version>4.1.3</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/buttons.colVis.js</location>
+        <name>DataTables Buttons column visibility</name>
+        <version>4.1.3</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/buttons.print.js</location>
+        <name>DataTables Buttons print</name>
+        <version>4.1.3</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/dataTables.rowGroup.js</location>
+        <name>DataTables RowGroup</name>
+        <version>2.1.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/dataTables.select.js</location>
+        <name>DataTables Select</name>
+        <version>4.1.1</version>
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>

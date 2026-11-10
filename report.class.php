@@ -787,6 +787,23 @@ abstract class report_base {
     }
 
     /**
+     * Get the bulk actions that the report asks for and that a plugin gives to the user.
+     *
+     * @param string[] $ids action ids from the report options
+     * @return array[] list of ['id' => string, 'label' => string, 'url' => string]
+     */
+    public function get_bulk_actions(array $ids): array {
+        // The hook needs the Totara hook manager.
+        if (!$ids || !class_exists(\totara_core\hook\base::class)) {
+            return [];
+        }
+        $hook = new \block_configurable_reports\hook\report_actions($this->config, $ids);
+        $hook->execute();
+
+        return $hook->get_actions();
+    }
+
+    /**
      * add_jsordering
      *
      * @param moodle_page $moodlepage
@@ -795,7 +812,21 @@ abstract class report_base {
     public function add_jsordering(moodle_page $moodlepage): void {
         switch (get_config('block_configurable_reports', 'reporttableui')) {
             case 'datatables':
-                cr_add_jsdatatables('#reporttable', $moodlepage);
+                $options = null;
+                $actions = [];
+                if ($this->config->type === 'sql') {
+                    $components = cr_unserialize($this->config->components);
+                    $config = $components['customsql']['config']->datatablesconfig ?? null;
+                    $options = \block_configurable_reports\datatables_config::decode($config);
+                    if ($options === null && trim((string) $config) !== '') {
+                        debugging('The DataTables options of report ' . $this->config->id .
+                            ' are not a JSON object. The default options are used.', DEBUG_DEVELOPER);
+                    }
+                    if ($options !== null) {
+                        $actions = $this->get_bulk_actions(\block_configurable_reports\datatables_config::take_actions($options));
+                    }
+                }
+                cr_add_jsdatatables('#reporttable', $moodlepage, $options, $actions, (int) $this->config->id);
                 break;
             case 'jquery':
                 cr_add_jsordering('#reporttable', $moodlepage);

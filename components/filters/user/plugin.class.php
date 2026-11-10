@@ -134,8 +134,7 @@ class plugin_user extends filter_base {
                 $nameformat = get_string('fullnamedisplay');
             }
 
-            $namesArray = \core_user\fields::get_name_fields();
-            $allnames = \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects;
+            [$namesArray, $allnames] = cr_get_user_name_fields();
             $sort = implode(',', order_in_string($namesArray, $nameformat));
 
             [$usql, $params] = $remotedb->get_in_or_equal($userlist);

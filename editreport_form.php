@@ -97,6 +97,13 @@ class report_edit_form extends moodleform {
         $mform->addHelpButton('jsordering', 'jsordering', 'block_configurable_reports');
         $mform->setDefault('jsordering', 1);
 
+        // DataTables sorts and pages the table in the browser. It needs JavaScript ordering on, and no server pagination.
+        if (get_config('block_configurable_reports', 'reporttableui') === 'datatables') {
+            $mform->setConstant('jsordering', 1);
+            $mform->setConstant('pagination', 0);
+            $mform->hardFreeze(['jsordering', 'pagination']);
+        }
+
         $mform->addElement('checkbox', 'displaytotalrecords', get_string('displaytotalrecords', 'block_configurable_reports'), get_string('displaytotalrecordsdescription', 'block_configurable_reports'));
         $mform->addElement('checkbox', 'displayprintbutton', get_string('displayprintbutton', 'block_configurable_reports'), get_string('displayprintbuttondescription', 'block_configurable_reports'));
 

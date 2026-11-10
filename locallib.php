@@ -55,17 +55,22 @@ function cr_print_js_function() {
  *
  * @param string $cssid
  * @param moodle_page $page
+ * @param stdClass|null $options DataTables options of the report. They replace the defaults with the same keys.
+ * @param array[] $actions bulk actions from report::get_bulk_actions(): a button for each, over the table
+ * @param int $reportid the report id that the action buttons post
  * @return void
  */
-function cr_add_jsdatatables(string $cssid, moodle_page $page) {
+function cr_add_jsdatatables(string $cssid, moodle_page $page, ?stdClass $options = null, array $actions = [],
+        int $reportid = 0) {
     $data = [];
     $data['selector'] = $cssid;
+    $data['options'] = $options;
+    $data['actions'] = $actions;
+    $data['reportid'] = $reportid;
 
     $page->requires->string_for_js('thousandssep', 'langconfig');
     $page->requires->strings_for_js(
         [
-            'datatables_sortascending',
-            'datatables_sortdescending',
             'datatables_first',
             'datatables_last',
             'datatables_next',
@@ -79,6 +84,7 @@ function cr_add_jsdatatables(string $cssid, moodle_page $page) {
             'datatables_processing',
             'datatables_search',
             'datatables_zerorecords',
+            'bulkactions',
         ],
         'block_configurable_reports'
     );
@@ -624,6 +630,41 @@ function cr_get_context(int $context, ?int $id = null, $strictness = null) {
 }
 
 /**
+ * Get the user name fields, for both Moodle 3.11+ and Totara.
+ *
+ * Totara does not have \core_user\fields. It keeps get_all_user_name_fields(), which Moodle removed in 4.2.
+ *
+ * @return array [string[] $fields, string $selects] The name fields, and the same fields as an SQL select list.
+ */
+function cr_get_user_name_fields(): array {
+    if (class_exists('\core_user\fields')) {
+        $fields = \core_user\fields::get_name_fields();
+        $selects = \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects;
+
+        return [$fields, $selects];
+    }
+
+    return [array_values(get_all_user_name_fields()), get_all_user_name_fields(true)];
+}
+
+/**
+ * Get the list of course categories this user can see, for both Moodle and Totara.
+ *
+ * Totara does not have core_course_category. It keeps the older coursecat class.
+ *
+ * @param string $requiredcapability
+ * @param int $excludeid
+ * @return array Category names, keyed by category id.
+ */
+function cr_get_categories_list(string $requiredcapability = '', int $excludeid = 0): array {
+    if (class_exists('core_course_category')) {
+        return core_course_category::make_categories_list($requiredcapability, $excludeid);
+    }
+
+    return coursecat::make_categories_list($requiredcapability, $excludeid);
+}
+
+/**
  * cr_make_categories_list
  *
  * @param array $list
@@ -642,7 +683,7 @@ function cr_make_categories_list(&$list, &$parents, $requiredcapability = '', $e
         $list = [];
     }
 
-    $list += core_course_category::make_categories_list($requiredcapability, $excludeid);
+    $list += cr_get_categories_list($requiredcapability, $excludeid);
 
     // Building the list of all parents of all categories in the system is highly undesirable and hardly ever needed.
     // Usually user needs only parents for one particular category, in which case should be used:
@@ -866,3 +907,48 @@ function block_configurable_reports_can_managesqlreports($context): bool {
 
     return false;
 }
+
+/**
+ * Get the SQL dialect of the site database, for the SQL editor.
+ *
+ * @return string 'mysql', 'mariadb', 'pgsql', or 'standard' for other databases.
+ */
+function cr_sql_dialect(): string {
+    global $CFG, $DB;
+
+    switch ($DB->get_dbfamily()) {
+        case 'mysql':
+            return $CFG->dbtype === 'mariadb' ? 'mariadb' : 'mysql';
+        case 'postgres':
+            return 'pgsql';
+        default:
+            return 'standard';
+    }
+}
+
+/**
+ * Get the placeholders that SQL reports can use, for the completion of the SQL editor.
+ *
+ * The report placeholders are the ones that report_sql::prepare_sql() replaces. The filter placeholders come
+ * from the filter plugins: those that take a column are shown as %%FILTER_NAME:column%%.
+ *
+ * @return string[]
+ */
+function cr_sql_placeholders(): array {
+    global $CFG;
+
+    // The variable and search text filters build their placeholder names at run time, so they are listed here.
+    $placeholders = ['%%COURSEID%%', '%%USERID%%', '%%CATEGORYID%%', '%%STARTTIME%%', '%%ENDTIME%%', '%%WWWROOT%%',
+        '%%DEBUG%%', '%%FILTER_VAR%%', '%%FILTER_SEARCHTEXT:column%%'];
+    foreach (cr_get_component_plugins('filters') as $filter) {
+        $code = file_get_contents($CFG->dirroot . '/blocks/configurable_reports/components/filters/' . $filter .
+            '/plugin.class.php');
+        preg_match_all('/%%(FILTER_[A-Z_]+)(:)?/', $code, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $placeholders[] = empty($match[2]) ? '%%' . $match[1] . '%%' : '%%' . $match[1] . ':column%%';
+        }
+    }
+
+    return array_values(array_unique($placeholders));
+}
+

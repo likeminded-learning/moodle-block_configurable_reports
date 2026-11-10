@@ -2,26 +2,30 @@ define(
     [
         'jquery',
         'block_configurable_reports/jquery.tablesorter',
-        'block_configurable_reports/jquery.dataTables',
-        'block_configurable_reports/codemirror',
-        'block_configurable_reports/sql',
         'core/config',
-        'core/notification'
-    ], function($, tablesorter, dataTable, CodeMirror, sql, Config, Notification) {
+        'core/notification',
+        'require'
+    ], function($, tablesorter, Config, Notification, require) {
 
-        // The editor wrapping the remote query textarea, when syntax highlighting is on. Setting the
+        // The editor wrapping the SQL query textarea, when syntax highlighting is on. Setting the
         // textarea's own value is not enough once CodeMirror has taken it over.
-        var remoteeditor = null;
+        var queryeditor = null;
+
+        // The "render" value in the report's DataTables options that asks for a row checkbox column.
+        var SELECT_RENDER = 'select';
+
+        // The course the AJAX scripts check access in. Totara has no M.cfg.courseId, so PHP gives it.
+        var courseid = null;
 
         /**
-         * Ask one of the plugin's AJAX scripts for a category listing or a report.
+         * Ask one of the plugin's AJAX scripts for data.
          *
          * @param {String} script The script to call, relative to the plugin.
          * @param {Object} params The parameters it takes, beyond the course and the sesskey.
          * @return {Promise} Resolved with the decoded response.
          */
         var request = function(script, params) {
-            params.courseid = Config.courseId;
+            params.courseid = courseid;
             params.sesskey = Config.sesskey;
 
             var url = Config.wwwroot + '/blocks/configurable_reports/' + script + '?' +
@@ -42,18 +46,80 @@ define(
         };
 
         /**
-         * Build an option element. The value and the text come from the repository, so neither is
-         * parsed as HTML.
+         * Post values to a bulk action page in a new form.
          *
-         * @param {String} value
-         * @param {String} text
-         * @return {HTMLElement}
+         * @param {String} url The action page.
+         * @param {String[]} values The checkbox column text of the selected rows.
+         * @param {Number} reportid The report id.
          */
-        var option = function(value, text) {
-            var element = document.createElement('option');
-            element.value = value;
-            element.textContent = text;
-            return element;
+        var postAction = function(url, values, reportid) {
+            var form = document.createElement('form');
+            form.method = 'post';
+            form.action = url;
+            var add = function(name, value) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            };
+            values.forEach(function(value) {
+                add('values[]', value);
+            });
+            add('reportid', reportid);
+            add('sesskey', Config.sesskey);
+            add('returnurl', window.location.href);
+            document.body.appendChild(form);
+            form.submit();
+        };
+
+        /**
+         * Add a button over the table for each bulk action. A button posts the selected rows.
+         *
+         * @param {DataTable.Api} table The report table.
+         * @param {Object[]} actions The actions: id, label and url.
+         * @param {Number} reportid The report id.
+         */
+        var addActions = function(table, actions, reportid) {
+            // Select gives its checkbox renderer this name. The column holds the value of each row.
+            var column = table.columns().indexes().toArray().find(function(index) {
+                var render = table.column(index).init().render;
+                return render && render._name === 'selectCheckbox';
+            });
+            if (column === undefined) {
+                window.console.warn('The report asks for bulk actions, but it has no "render": "select" column.');
+                return;
+            }
+
+            var bar = document.createElement('div');
+            bar.className = 'cr-bulkactions mb-2';
+            bar.setAttribute('role', 'group');
+            bar.setAttribute('aria-label', M.str.block_configurable_reports.bulkactions);
+            var buttons = actions.map(function(action) {
+                var button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-secondary mr-2';
+                button.dataset.label = action.label;
+                button.addEventListener('click', function() {
+                    // The raw cell data, not the checkbox that the renderer shows.
+                    var values = table.rows({selected: true}).data().toArray().map(function(row) {
+                        return String(row[column]).trim();
+                    });
+                    postAction(action.url, values, reportid);
+                });
+                bar.appendChild(button);
+                return button;
+            });
+            var update = function() {
+                var count = table.rows({selected: true}).count();
+                buttons.forEach(function(button) {
+                    button.disabled = count === 0;
+                    button.textContent = button.dataset.label + ' (' + count + ')';
+                });
+            };
+            table.on('select deselect draw', update);
+            table.table().container().before(bar);
+            update();
         };
 
         return {
@@ -75,110 +141,145 @@ define(
                 });
             },
             add_jsdatatables: function(params) {
-                $(params.selector).dataTable({
-                    'bAutoWidth': false,
-                    'sPaginationType': 'full_numbers',
-                    'fixedHeader': true,
-                    'aaSorting': [],
-                    'oLanguage': {
-                        'oAria': {
-                            'sSortAscending': M.str.block_configurable_reports.datatables_sortascending,
-                            'sSortDescending': M.str.block_configurable_reports.datatables_sortdescending,
+                var str = M.str.block_configurable_reports;
+                // camelCase keys: DataTables copies a legacy (Hungarian) key over its camelCase key, so a legacy
+                // default would replace the report's own camelCase option.
+                var defaults = {
+                    autoWidth: false,
+                    pagingType: 'full_numbers',
+                    order: [],
+                    language: {
+                        paginate: {
+                            first: str.datatables_first,
+                            last: str.datatables_last,
+                            next: str.datatables_next,
+                            previous: str.datatables_previous
                         },
-                        'oPaginate': {
-                            'sFirst': M.str.block_configurable_reports.datatables_first,
-                            'sLast': M.str.block_configurable_reports.datatables_last,
-                            'sNext': M.str.block_configurable_reports.datatables_next,
-                            'sPrevious': M.str.block_configurable_reports.datatables_previous
-                        },
-                        'sEmptyTable': M.str.block_configurable_reports.datatables_emptytable,
-                        'sInfo': M.str.block_configurable_reports.datatables_info,
-                        'sInfoEmpty': M.str.block_configurable_reports.datatables_infoempty,
-                        'sInfoFiltered': M.str.block_configurable_reports.datatables_infofiltered,
-                        'sInfoThousands': M.str.langconfig.thousandssep,
-                        'sLengthMenu': M.str.block_configurable_reports.datatables_lengthmenu,
-                        'sLoadingRecords': M.str.block_configurable_reports.datatables_loadingrecords,
-                        'sProcessing': M.str.block_configurable_reports.datatables_processing,
-                        'sSearch': M.str.block_configurable_reports.datatables_search,
-                        'sZeroRecords': M.str.block_configurable_reports.datatables_zerorecords
+                        emptyTable: str.datatables_emptytable,
+                        info: str.datatables_info,
+                        infoEmpty: str.datatables_infoempty,
+                        infoFiltered: str.datatables_infofiltered,
+                        thousands: M.str.langconfig.thousandssep,
+                        lengthMenu: str.datatables_lengthmenu,
+                        loadingRecords: str.datatables_loadingrecords,
+                        processing: str.datatables_processing,
+                        search: str.datatables_search,
+                        zeroRecords: str.datatables_zerorecords
+                    }
+                };
+
+                // The report's own options replace the defaults with the same keys. Arrays are replaced, not merged.
+                var options = $.extend(true, {}, defaults, params.options || {});
+                Object.keys(params.options || {}).forEach(function(key) {
+                    if (Array.isArray(params.options[key])) {
+                        options[key] = params.options[key];
+                    }
+                });
+
+                // Load DataTables and the extensions only on the report page. The extensions register themselves.
+                require([
+                    'block_configurable_reports/jquery.dataTables',
+                    'block_configurable_reports/dataTables.buttons',
+                    'block_configurable_reports/buttons.colVis',
+                    'block_configurable_reports/buttons.print',
+                    'block_configurable_reports/dataTables.rowGroup',
+                    'block_configurable_reports/dataTables.select'
+                ], function(DataTable) {
+                    // JSON cannot hold a function, so a column with "render": "select" gets the Select checkbox.
+                    (options.columns || []).concat(options.columnDefs || []).forEach(function(column) {
+                        if (column && column.render === SELECT_RENDER) {
+                            column.render = DataTable.render.select();
+                        }
+                    });
+                    // The 'display' class gives the DataTables default style: row lines, stripes, hover and ordered column.
+                    var table = document.querySelector(params.selector);
+                    table.classList.add('display');
+                    var api = new DataTable(table, options);
+                    if (params.actions && params.actions.length) {
+                        addActions(api, params.actions, params.reportid);
                     }
                 });
             },
-            cmirror: function() {
-                // Documentation can be found @ http://codemirror.net/
+            cmirror: function(options) {
+                courseid = options.courseid;
                 var query = document.getElementById('id_querysql');
-                if (query) {
-                    CodeMirror.fromTextArea(query, {
-                        mode: "text/x-mysql",
-                        rtlMoveVisually: true,
-                        indentWithTabs: true,
-                        smartIndent: true,
-                        lineNumbers: true,
-                        autofocus: true,
-                    });
-                }
-
-                // Only on the page when a remote report repository is configured.
-                var remotequery = document.getElementById('id_remotequerysql');
-                if (remotequery) {
-                    remoteeditor = CodeMirror.fromTextArea(remotequery, {
-                        mode: "text/x-mysql",
-                        rtlMoveVisually: true,
-                        indentWithTabs: true,
-                        smartIndent: true,
-                        lineNumbers: true,
-                        //    autofocus: true
-                    });
-                }
-            },
-            remote_reports: function() {
-                var categories = document.getElementById('id_reportcategories');
-                var reports = document.getElementById('id_reportsincategory');
-                var query = document.getElementById('id_remotequerysql');
-
-                // All three are added together, and only when a repository is configured.
-                if (!categories || !reports || !query) {
+                if (!query) {
                     return;
                 }
 
-                categories.addEventListener('change', function() {
-                    // Keep the placeholder the form rendered, drop the previous category's reports.
-                    while (reports.options.length > 1) {
-                        reports.remove(1);
-                    }
-                    reports.selectedIndex = 0;
+                // The editor is a large module, so only this form loads it.
+                require(['block_configurable_reports/sqleditor-lazy'], function(sqleditor) {
+                    queryeditor = sqleditor.fromTextArea(query, {
+                        dialect: options.dialect,
+                        placeholders: options.placeholders,
+                        syntaxerror: options.syntaxerror,
+                        autofocus: true,
+                    });
 
-                    // The placeholder itself names no category to list.
-                    if (categories.selectedIndex <= 0) {
-                        return;
-                    }
-
-                    request('list_reports_in_category.php', {category: categories.value})
-                        .then(function(list) {
-                            list.forEach(function(report) {
-                                reports.appendChild(option(report.fullname, report.name));
-                            });
-                            return;
-                        })
-                        .catch(Notification.exception);
-                });
-
-                reports.addEventListener('change', function() {
-                    // The placeholder, and a list cleared from under a selection, name no report.
-                    if (reports.selectedIndex <= 0) {
-                        return;
-                    }
-
-                    request('get_remote_report.php', {reportname: reports.value})
+                    // Complete table and column names when the database has given them.
+                    request('schema.php', {})
                         .then(function(response) {
-                            query.value = response;
-                            if (remoteeditor) {
-                                remoteeditor.setValue(response);
-                            }
+                            queryeditor.setTables(response.tables);
                             return;
                         })
                         .catch(Notification.exception);
                 });
+            },
+            remote_reports: function(course, strings) {
+                courseid = course;
+                var reports = document.getElementById('id_repositoryreport');
+
+                // Only on the page when the report repository could be read.
+                if (!reports) {
+                    return;
+                }
+
+                /**
+                 * Fill a field with one part of the chosen repository report.
+                 *
+                 * @param {String} buttonid The button that pulls the part.
+                 * @param {String} part 'sql' or 'datatables'.
+                 * @param {String} fieldid The field that the part goes in.
+                 * @param {String} confirmation The question to ask before the field's text is replaced.
+                 */
+                var pull = function(buttonid, part, fieldid, confirmation) {
+                    var button = document.getElementById(buttonid);
+                    var field = document.getElementById(fieldid);
+                    if (!button || !field) {
+                        return;
+                    }
+
+                    // The SQL field is a CodeMirror editor when syntax highlighting is on.
+                    var editor = function() {
+                        return fieldid === 'id_querysql' ? queryeditor : null;
+                    };
+                    var fill = function() {
+                        request('repository.php', {path: reports.value, part: part})
+                            .then(function(response) {
+                                field.value = response.content;
+                                if (editor()) {
+                                    editor().setValue(response.content);
+                                }
+                                return;
+                            })
+                            .catch(Notification.exception);
+                    };
+
+                    button.addEventListener('click', function() {
+                        if (!reports.value) {
+                            return;
+                        }
+                        var text = editor() ? editor().getValue() : field.value;
+                        if (text.trim() === '') {
+                            fill();
+                            return;
+                        }
+                        Notification.confirm(button.textContent, confirmation, strings.yes, strings.cancel, fill);
+                    });
+                };
+
+                pull('id_pullsql', 'sql', 'id_querysql', strings.confirmsql);
+                pull('id_pulldatatables', 'datatables', 'id_datatablesconfig', strings.confirmdatatables);
             }
         };
     });
